@@ -1,0 +1,48 @@
+.docx-viewer {
+  font-family: 'Times New Roman', Times, serif;
+  line-height: 1.5;
+}
+
+.docx-viewer p {
+  margin: 1em 0;
+}
+
+.docx-viewer h1, .docx-viewer h2, .docx-viewer h3 {
+  margin: 1em 0;
+  font-weight: bold;
+}
+
+.docx-viewer h1 {
+  font-size: 2em;
+}
+
+.docx-viewer h2 {
+  font-size: 1.5em;
+}
+
+.docx-viewer h3 {
+  font-size: 1.2em;
+}
+
+.docx-viewer ul, .docx-viewer ol {
+  margin: 1em 0;
+  padding-left: 2em;
+}
+
+.docx-viewer li {
+  margin: 0.5em 0;
+}
+
+/* Adjust text color */
+.docx-viewer span {
+  color: inherit;
+}
+
+/* Bullet points */
+.docx-viewer ul {
+  list-style-type: disc;
+}
+
+.docx-viewer ol {
+  list-style-type: decimal;
+}

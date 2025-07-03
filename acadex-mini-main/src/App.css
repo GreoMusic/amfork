@@ -1,0 +1,159 @@
+/* #root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+} */
+
+/* .logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+} */
+.dark{
+  background-color: #1c2434;
+}
+.dark .bg-white{
+  background-color: #1c2434;
+}
+.dark .text-black{
+  color: #fff;
+}
+.bg-light{
+  background-color: #fff !important;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.text-yellow{
+  color: #f7ff88;
+}
+
+.text-green{
+  color: #15803d;
+}
+.dark .text-success{
+  color: #7bfa7f;
+}
+.dark .text-danger{
+  color: #fa7b7b;
+}
+
+
+/* LoadingOverlay.css */
+
+.loading-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-overlay.visible {
+  display: flex;
+}
+
+.loading-spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+.loader-line-container {
+  width: 100%;
+  height: 5px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.loader-line {
+  height: 100%;
+  background-color: #76c7c0;
+  border-radius: 5px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  margin-top: 10px;
+}
+
+.action-element {
+  transform: none;
+}
+.apple-hover:hover {
+      transform: scale(1.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .fade-in-up {
+      opacity: 0;
+      animation: fadeInUp 0.8s ease-in-out forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .corner-gradient::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      scale: 1.2;
+      background: linear-gradient(
+        to bottom left,
+        rgba(227, 237, 251, 0.6) 0%,
+        rgba(227, 237, 251, 0) 60%
+      );
+      pointer-events: none;
+      z-index: 0;
+      transform: translate(25%, -25%);
+    }

@@ -1,0 +1,35 @@
+/* src/TagInput.css */
+
+.tag-input {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.tag {
+  background-color: #e5ecff;
+  border-radius: 3px;
+  padding: 5px;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.tag-close {
+  margin-left: 5px;
+  cursor: pointer;
+  color: #999;
+}
+
+.tag-input input {
+  border: none;
+  outline: none;
+  flex: 1;
+  padding: 5px;
+}
+
+.tag-input input::placeholder {
+  color: #ccc;
+}

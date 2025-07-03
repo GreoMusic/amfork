@@ -1,0 +1,16 @@
+.dropzone {
+    border: 15px dashed #cccccc;
+    border-radius: 20px;
+    padding: 150px;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .active {
+    border-color: #2196f3;
+  }
+
+  .txt-orange{
+    color: "#fb923c";
+  }
+  
