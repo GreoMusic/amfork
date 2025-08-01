@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Student Editor</title>
+    <style>
+        /* Add your CSS styles here */
+    </style>
+</head>
+<body>
+    <h1>Enhanced Student Editor</h1>
+    <div id="editor" contenteditable="true" oninput="checkForInsight()"></div>
+
+    <script>
+        async function checkForInsight() {
+            const editor = document.getElementById('editor');
+            const text = editor.innerText;
+
+            // Send text to LISA's backend for processing
+            const response = await fetch('/process_text', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: text }),
+            });
+
+            const data = await response.json();
+
+            // Process the response from LISA
+            if (data.insight) {
+                editor.classList.add('insight');
+                setTimeout(() => editor.classList.remove('insight'), 2000);
+            }
+
+            if (data.ghost_text) {
+                showGhostText(data.ghost_text);
+            }
+        }
+
+        function showGhostText(text) {
+            const editor = document.getElementById('editor');
+            const ghostText = document.createElement('span');
+            ghostText.className = 'ghost-text';
+            ghostText.textContent = text;
+            editor.appendChild(ghostText);
+
+            // Remove ghost text after some time
+            setTimeout(() => {
+                ghostText.remove();
+            }, 10000);
+        }
+    </script>
+</body>
+</html>

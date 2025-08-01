@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acadex Mini - Student Interface</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Open+Sans&family=Inter&family=SF+Pro+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* --- [Existing Styles Retained For Brevity] --- */
+    /* All original CSS from Student View V3.html is included here. */
+    /* Only new and modified styles are shown below for clarity. */
+
+    .animated-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      background: linear-gradient(270deg, #e0f2f7, #e8f9fd, #f0fbfc, #f8fcff);
+      background-size: 400% 400%;
+      animation: gradientMorph 20s ease infinite alternate;
+      transition: filter 1s ease-in-out; /* For Flow State */
+    }
+
+    .animated-background.flow-state-active {
+        filter: saturate(1.5) brightness(1.1); /* Deepen colors for Flow State */
+        animation-duration: 10s; /* Speed up morphing */
+    }
+
+    .blob {
+      position: absolute;
+      background: linear-gradient(45deg, rgba(173, 216, 230, 0.5), rgba(255, 160, 160, 0.5));
+      border-radius: 50%;
+      filter: blur(150px);
+      opacity: 0.6;
+    }
+
+    .blob-one {
+      width: 300px; height: 300px; top: 10%; left: 15%;
+      animation: blobMovement 25s infinite alternate ease-in-out;
+    }
+
+    .blob-two {
+      width: 400px; height: 400px; bottom: 20%; right: 10%;
+      animation: blobMovement 30s infinite alternate-reverse ease-in-out;
+      background: linear-gradient(135deg, rgba(144, 238, 144, 0.5), rgba(255, 255, 0, 0.5));
+    }
+
+    .blob-three {
+      width: 250px; height: 250px; top: 50%; left: 50%;
+      animation: blobMovement 20s infinite ease-in-out;
+      background: linear-gradient(90deg, rgba(200, 162, 200, 0.5), rgba(135, 206, 235, 0.5));
+    }
+
+    @keyframes gradientMorph {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    @keyframes blobMovement {
+        0% { transform: translate(0, 0) scale(1); }
+        25% { transform: translate(20px, -30px) scale(1.05); }
+        50% { transform: translate(-15px, 25px) scale(0.98); }
+        75% { transform: translate(30px, -10px) scale(1.02); }
+        100% { transform: translate(0, 0) scale(1); }
+    }
+    
+    body {
+        transition: background-image 2s ease-in-out;
+    }
+
+    /* --- [NEW STYLES FOR ENHANCEMENTS] --- */
+
+    /* 1. Ghost Text Nudge */
+    #editor-container {
+        position: relative;
+    }
+    #ghost-text {
+        position: absolute;
+        top: 2rem; /* Align with editor padding */
+        left: 2rem;
+        color: #9ca3af; /* Tailwind gray-400 */
+        opacity: 0.7;
+        pointer-events: none; /* Allows typing over it */
+        transition: opacity 0.3s ease;
+        font-style: italic;
+    }
+
+    /* 2. Moment of Insight Celebration */
+    @keyframes insight-sparkle {
+        0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        50% { box-shadow: 0 0 20px 10px rgba(255, 215, 0, 0.7); }
+        100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+    }
+    .insight-celebration {
+        animation: insight-sparkle 1.5s ease-out;
+    }
+
+    /* 5. Micro-animations for Toolbar */
+    .toolbar-button, #styleButton, #fontButton, #fontSizeButton, #linkButton, #imageButton, #moreMenuButton {
+        transition: all 0.2s ease-in-out;
+    }
+    .toolbar-button:active, #styleButton:active, #fontButton:active, #fontSizeButton:active {
+        transform: scale(0.9);
+    }
+    .toolbar-button.active {
+        background-color: rgba(59, 130, 246, 0.2);
+        color: #2563eb;
+    }
+
+
+    /* 6. Smart Paste Prompt */
+    #smart-paste-prompt {
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
+        z-index: 70;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    #smart-paste-prompt.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* 8. Auto-Save Confidence Indicator */
+    #save-status {
+        position: fixed;
+        bottom: 1.5rem;
+        left: 1.5rem;
+        z-index: 100;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        padding: 0.5rem 1rem;
+        border-radius: 9999px;
+    }
+
+    /* 9. Gamification of Progress */
+    #writing-growth-indicator {
+        position: absolute;
+        bottom: 1rem;
+        left: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.5s ease;
+    }
+    #growth-icon {
+        width: 24px;
+        height: 24px;
+        transition: transform 0.5s ease, color 0.5s ease;
+    }
+    #growth-level {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #4b5563; /* gray-600 */
+    }
+
+    /* Include all other original CSS styles from V3 here */
+    .ai-feedback-container {
+        position: relative;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        background-color: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        z-index: 30;
+    }
+
+  </style>
+</head>
+
+<body class="min-h-screen text-gray-900 font-sans" style="background-image: linear-gradient(to bottom right, #eff6ff, #dbeafe);">
+  <div id="animated-background" class="animated-background">
+    <div class="blob blob-one"></div>
+    <div class="blob blob-two"></div>
+    <div class="blob blob-three"></div>
+  </div>
+
+  <div id="save-status" class="bg-white/30 backdrop-blur-glass rounded-full shadow-md text-sm font-semibold">
+      <span id="save-status-text"></span>
+  </div>
+
+  <header class="fixed top-0 w-full z-50 backdrop-blur-glass glass-layer bg-white/10 ring-1 ring-white/10 shadow-sm">
+      </header>
+  
+  <main id="app" class="pt-24 px-6 max-w-7xl mx-auto">
+    <section id="dashboard" class="space-y-12">
+      <div id="welcome-banner" class="bg-white/30 backdrop-blur-glass rounded-lg shadow-lg p-6 mb-6 border border-white border-opacity-20 relative glass-layer text-center">
+          <h2 class="text-2xl font-bold text-gray-800">Welcome Back!</h2>
+          <p id="writing-stats" class="text-gray-600 mt-2"></p>
+          <p id="lisa-welcome-message" class="text-purple-700 italic mt-3"></p>
+      </div>
+
+      <h2 class="text-2xl font-semibold mb-4">My Classes</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="classes-grid">
+        </div>
+      </section>
+
+    <section id="workspace" class="hidden">
+      <div class="flex gap-6 max-w-6xl mx-auto">
+        <section class="flex-1 relative"> <div id="editor-container">
+            <div id="editor" class="editor-content bg-white rounded-xl shadow-inner" contenteditable="true"></div>
+            <div id="ghost-text"></div>
+          </div>
+
+          <div id="smart-paste-prompt" class="bg-white/50 backdrop-blur-xl p-3 rounded-lg shadow-lg border border-white/20 flex items-center gap-3">
+              <p class="text-sm text-gray-700">Pasted content. <button id="smart-paste-action" class="font-semibold text-blue-600 hover:underline">Clean formatting?</button></p>
+              <button id="smart-paste-dismiss" class="text-gray-500 hover:text-gray-800">&times;</button>
+          </div>
+
+          <div class="mt-4 flex justify-end gap-2">
+            <button id="finalFeedbackButton" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg">Get Final Feedback</button>
+            <button class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg">Submit</button>
+          </div>
+        </section>
+
+        <aside id="ai-assistant" class="w-1/4 hidden lg:block slide-in-right sticky top-24 h-fit">
+          <div id="lisa-panel" class="ai-feedback-container shimmer-text"> <h4 class="text-lg font-bold mb-2 text-gray-800 flex items-center">
+              <i class="fas fa-thin fa-brain mr-2 text-blue-600 text-xl"></i> LISA
+            </h4>
+            <p id="ai-text" class="text-sm italic text-gray-600"></p>
+            
+            <div id="writing-growth-indicator">
+              <i id="growth-icon" class="fas fa-seedling text-gray-400"></i>
+              <span id="growth-level">Level 1</span>
+            </div>
+          </div>
+          </aside>
+      </div>
+    </section>
+  </main>
+  
+  <script>
+  // --- [Existing JS Retained For Brevity] ---
+  // All original JavaScript from Student View V3.html is the foundation.
+  // Only new and modified functions are shown below for clarity.
+
+  // Constants & Global State (with additions)
+  const LISA_API_ENDPOINT = 'http://127.0.0.1:5001/lisa_prompt';
+  // ... (existing constants)
+
+  // NEW STATE VARIABLES
+  let flowStateTimer;
+  let lastKeyPressTime = 0;
+  const FLOW_STATE_THRESHOLD = 2000; // ms between keypresses to be considered "in flow"
+  let autoSaveTimer;
+  const AUTO_SAVE_INTERVAL = 2000; // ms
+  let nudgeInteractionHistory = {}; // For adaptive nudge intensity
+  let writingGrowthScore = 0;
+
+  // DOM Elements (with additions)
+  let animatedBackground;
+  let welcomeBanner;
+  let writingStats;
+  let lisaWelcomeMessage;
+  let ghostText;
+  let editorContainer;
+  let lisaPanel;
+  let saveStatus;
+  let smartPastePrompt;
+  let growthIcon;
+  let growthLevel;
+  // ... (all existing DOM element variables)
+
+  // --- [FEATURE IMPLEMENTATIONS] ---
+
+  // 4. "Flow State" Indicator
+  function checkFlowState() {
+      const now = Date.now();
+      if (now - lastKeyPressTime < FLOW_STATE_THRESHOLD) {
+          animatedBackground.classList.add('flow-state-active');
+      } else {
+          animatedBackground.classList.remove('flow-state-active');
+      }
+      flowStateTimer = setTimeout(checkFlowState, FLOW_STATE_THRESHOLD);
+  }
+
+  function recordKeyPress() {
+      lastKeyPressTime = Date.now();
+  }
+
+  // 8. Auto-Save Confidence
+  function triggerAutoSave() {
+      clearTimeout(autoSaveTimer);
+      autoSaveTimer = setTimeout(() => {
+          // In a real app, this would send data to a server.
+          // Here, we'll just simulate it.
+          console.log("Auto-saving content...");
+          showSaveStatus("Saving...", "text-gray-600");
+
+          setTimeout(() => {
+              // Simulate success
+              const now = new Date();
+              const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+              showSaveStatus(`All changes saved at ${timeString}`, "text-green-700", true);
+          }, 1000);
+      }, AUTO_SAVE_INTERVAL);
+  }
+
+  function showSaveStatus(message, colorClass, fadeOut = false) {
+      const statusText = saveStatus.querySelector('#save-status-text');
+      statusText.textContent = message;
+      saveStatus.className = `fixed bottom-6 left-6 z-50 bg-white/30 backdrop-blur-glass rounded-full shadow-md text-sm font-semibold p-2 px-4 opacity-100 ${colorClass}`;
+
+      if (fadeOut) {
+          setTimeout(() => {
+              saveStatus.style.opacity = '0';
+          }, 2000); // Fade out after 2 seconds
+      }
+  }
+
+  // 6. "Smart Paste" with Rubric Context
+  function handleEditorPaste(event) {
+      event.preventDefault();
+      const text = (event.clipboardData || window.clipboardData).getData('text');
+      document.execCommand('insertText', false, text);
+
+      // Show the smart paste prompt
+      smartPastePrompt.classList.add('visible');
+
+      document.getElementById('smart-paste-action').onclick = () => {
+          // This is a simplified "clean-up". A real app would be more robust.
+          const cleanedText = editor.innerText;
+          editor.innerHTML = `<p>${cleanedText.replace(/\n\s*\n/g, '</p><p>').replace(/\n/g, '<br>')}</p>`;
+          dismissSmartPaste();
+      };
+
+      document.getElementById('smart-paste-dismiss').onclick = dismissSmartPaste;
+  }
+
+  function dismissSmartPaste() {
+      smartPastePrompt.classList.remove('visible');
+  }
+
+  // 1. Contextual "Ghost Text" Nudges
+  function showGhostText(suggestion) {
+      if (!ghostText) return;
+      ghostText.textContent = ` ${suggestion}`; // Add space for cursor
+      // Position it after the current text
+      const selection = window.getSelection();
+      if (selection.rangeCount > 0) {
+          const range = selection.getRangeAt(0).cloneRange();
+          range.collapse(false); // Go to the end of the selection
+          const rect = range.getClientRects()[0];
+          if (rect) {
+              const editorRect = editor.getBoundingClientRect();
+              ghostText.style.top = `${rect.top - editorRect.top}px`;
+              ghostText.style.left = `${rect.left - editorRect.left}px`;
+              ghostText.style.opacity = '1';
+          }
+      }
+  }
+
+  function hideGhostText() {
+      if (ghostText) ghostText.style.opacity = '0';
+  }
+
+  // 2. "Moment of Insight" Celebration
+  function triggerInsightCelebration() {
+      lisaPanel.classList.add('insight-celebration');
+      setTimeout(() => {
+          lisaPanel.classList.remove('insight-celebration');
+      }, 1500); // Duration of the animation
+  }
+
+  // 9. "Gamification" of Progress
+  function updateWritingGrowth(points) {
+      writingGrowthScore += points;
+      const level = Math.floor(writingGrowthScore / 10) + 1;
+      growthLevel.textContent = `Level ${level}`;
+
+      // Update icon based on level
+      if (level < 3) {
+          growthIcon.className = 'fas fa-seedling text-green-600';
+      } else if (level < 6) {
+          growthIcon.className = 'fas fa-leaf text-green-600';
+      } else {
+          growthIcon.className = 'fas fa-tree text-green-600';
+      }
+      growthIcon.style.transform = `scale(${1 + level * 0.05}) rotate(${writingGrowthScore * 5}deg)`;
+  }
+  
+  // -- MODIFIED CORE FUNCTIONS --
+
+  // Modified handleEditorInput to include new features
+  async function handleEditorInput() {
+    recordKeyPress(); // For Flow State
+    triggerAutoSave(); // For Auto-Save
+    hideGhostText(); // Hide ghost text on any new input
+
+    console.log(">> handleEditorInput FIRED! <<");
+    // ... (rest of the existing function logic from V3)
+    // This function's core logic for calling getLisaPrompt remains the same.
+  }
+
+  // Modified renderDashboard for Personalized Welcome
+  function renderDashboard() {
+    const classesGrid = document.getElementById('classes-grid');
+    classesGrid.innerHTML = '';
+    
+    // 7. Personalized Welcome
+    const totalWords = 1250; // This would be calculated in a real app
+    const streak = 5; // This would be tracked
+    writingStats.textContent = `You're on a ${streak}-day writing streak with ${totalWords.toLocaleString()} words written this month!`;
+    lisaWelcomeMessage.textContent = `"Let's tackle that 'World History' assignment today. Remember to focus on primary sources!"`; // Example personalized message
+
+    classesData.forEach((classItem) => {
+      // ... existing card creation logic ...
+      classesGrid.appendChild(classCard);
+    });
+  }
+
+  // Modified goToWorkspace to initialize features
+  async function goToWorkspace(assignment) {
+      currentAssignmentData = assignment;
+      // ... (existing navigation logic)
+
+      // Initialize workspace features
+      lastKeyPressTime = Date.now();
+      checkFlowState();
+      updateWritingGrowth(0); // Initialize display
+
+      editor.addEventListener('paste', handleEditorPaste);
+      // ... (rest of the existing function logic)
+  }
+
+  // Modified goToDashboard to clean up features
+  function goToDashboard() {
+      // ... (existing navigation logic)
+
+      // Cleanup workspace features
+      clearTimeout(flowStateTimer);
+      clearTimeout(autoSaveTimer);
+      animatedBackground.classList.remove('flow-state-active');
+      saveStatus.style.opacity = '0';
+      editor.removeEventListener('paste', handleEditorPaste);
+
+      // ... (rest of the existing function logic)
+  }
+
+  // Modified DOMContentLoaded to find new elements
+  document.addEventListener('DOMContentLoaded', () => {
+    // ... (finding all existing elements from V3)
+    
+    // Find NEW elements
+    animatedBackground = document.getElementById('animated-background');
+    welcomeBanner = document.getElementById('welcome-banner');
+    writingStats = document.getElementById('writing-stats');
+    lisaWelcomeMessage = document.getElementById('lisa-welcome-message');
+    ghostText = document.getElementById('ghost-text');
+    editorContainer = document.getElementById('editor-container');
+    lisaPanel = document.getElementById('lisa-panel');
+    saveStatus = document.getElementById('save-status');
+    smartPastePrompt = document.getElementById('smart-paste-prompt');
+    growthIcon = document.getElementById('growth-icon');
+    growthLevel = document.getElementById('growth-level');
+
+    // ... (all existing event listeners and initializations)
+
+    if (editor) {
+      // ... (existing editor listeners)
+      // Add keypress listener for flow state
+      editor.addEventListener('keydown', recordKeyPress);
+    }
+  });
+
+
+  // --- SIMULATION & MOCKING FOR NEW FEATURES ---
+  // In a real application, the logic below would be integrated with LISA's API response.
+  
+  // Example: How LISA's response could trigger new features
+  // This is a placeholder for actual backend integration.
+  async function getLisaPrompt(userText, assignmentTitle, rubric, ...args) {
+      // This is the original function. We are mocking its response for demonstration.
+      console.log("Fetching LISA prompt (Simulated)...");
+
+      // Mocked response from the backend
+      const mockApiResponse = {
+          suggested_next_step: "That's a strong opening. **How about you connect this idea to the 'Historical Context' part of the rubric?**",
+          nudge_type: "standard", // "standard", "ghost_text", "insight"
+          ghost_text_suggestion: "for example, consider the economic conditions of the era...",
+          nudge_id: "nudge-hist-1" // For tracking interaction
+      };
+      
+      // Simulate different responses
+      if (userText.includes("critical thinking")) {
+          mockApiResponse.nudge_type = "insight";
+          mockApiResponse.suggested_next_step = "Excellent connection! You've really shown **deep critical thinking** here. This is a moment of insight.";
+      } else if (userText.endsWith("is...")) {
+          mockApiResponse.nudge_type = "ghost_text";
+      }
+
+      // --- Triggering new UI based on mocked response ---
+      if (mockApiResponse.nudge_type === "ghost_text") {
+          showGhostText(mockApiResponse.ghost_text_suggestion);
+      }
+      if (mockApiResponse.nudge_type === "insight") {
+          triggerInsightCelebration();
+          updateWritingGrowth(5); // Give more points for insight
+      } else {
+          updateWritingGrowth(1); // Standard points
+      }
+      
+      // The original typing effect logic remains the same
+      typeAIMessage(mockApiResponse.suggested_next_step, "ai-text");
+
+      // For Adaptive Nudge Intensity: Track that the nudge was shown
+      if (!nudgeInteractionHistory[mockApiResponse.nudge_id]) {
+          nudgeInteractionHistory[mockApiResponse.nudge_id] = { shown: 0, accepted: 0 };
+      }
+      nudgeInteractionHistory[mockApiResponse.nudge_id].shown++;
+      console.log("Nudge History:", nudgeInteractionHistory);
+
+      return mockApiResponse.suggested_next_step;
+  }
+  
+</script>
+</body>
+</html>

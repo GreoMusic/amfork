@@ -1,0 +1,1882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acadex Mini - Student Interface</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Open+Sans&family=Inter&family=SF+Pro+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    .animated-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Ensures it stays behind all content */
+    overflow: hidden; /* Prevent blobs from showing outside */
+
+    /* Morphing Gradients */
+    background: linear-gradient(270deg, #e0f2f7, #e8f9fd, #f0fbfc, #f8fcff); /* Soft blue-white gradients */
+    background-size: 400% 400%;
+    animation: gradientMorph 20s ease infinite alternate; /* Slower, smoother morphing */
+
+    /* Dust Motes (using pseudo-element) */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 1px, transparent 1px);
+      background-size: 30px 30px; /* Adjust density */
+      opacity: 0.5; /* Very subtle */
+      animation: moveMotes 100s linear infinite; /* Extremely slow movement */
+    }
+    display: none; /* Hidden by default */
+  animation-play-state: paused; /* Animations paused by default */
+  }
+
+  /* Keyframes for Morphing Gradients */
+  @keyframes gradientMorph {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Keyframes for Dust Motes */
+  @keyframes moveMotes {
+    from { background-position: 0 0; }
+    to { background-position: 100% 100%; } /* Moves diagonally */
+  }
+
+  /* Organic Blobs */
+  .blob {
+    position: absolute;
+    background: linear-gradient(45deg, rgba(173, 216, 230, 0.5), rgba(255, 160, 160, 0.5)); /* Soft gradient */
+    border-radius: 50%;
+    filter: blur(150px); /* Extremely blurry */
+    opacity: 0.6; /* Semi-transparent */
+  }
+
+  .blob-one {
+    width: 300px;
+    height: 300px;
+    top: 10%;
+    left: 15%;
+    animation: blobMovement 25s infinite alternate ease-in-out;
+  }
+
+  .blob-two {
+    width: 400px;
+    height: 400px;
+    bottom: 20%;
+    right: 10%;
+    animation: blobMovement 30s infinite alternate-reverse ease-in-out;
+    background: linear-gradient(135deg, rgba(144, 238, 144, 0.5), rgba(255, 255, 0, 0.5)); /* Another soft gradient */
+  }
+
+  .blob-three {
+    width: 250px;
+    height: 250px;
+    top: 50%;
+    left: 50%;
+    animation: blobMovement 20s infinite ease-in-out;
+    background: linear-gradient(90deg, rgba(200, 162, 200, 0.5), rgba(135, 206, 235, 0.5)); /* Another soft gradient */
+  }
+
+  /* Keyframes for Blob Movement */
+  @keyframes blobMovement {
+    0% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(20px, -30px) scale(1.05); }
+    50% { transform: translate(-15px, 25px) scale(0.98); }
+    75% { transform: translate(30px, -10px) scale(1.02); }
+    100% { transform: translate(0, 0) scale(1); }
+  }
+
+    /* Glassmorphic effects */
+    .backdrop-blur-glass {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      position: relative;
+    }
+
+    .glass-layer::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.15), transparent);
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
+    .editor-content {
+      min-height: 700px;
+      padding: 2rem;
+      outline: none;
+      font-family: 'SF Pro Display', sans-serif;
+      background-color: white;
+      border-radius: 0.75rem;
+    }
+
+    /* Animations */
+    .slide-in-left {
+      animation: slideInLeft 0.6s ease-out forwards;
+    }
+
+    @keyframes slideInLeft {
+      from {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink {
+      0%, 100% { border-color: transparent }
+      50% { border-color: white }
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -300px 0;
+      }
+      100% {
+        background-position: 300px 0;
+      }
+    }
+
+    .shimmer-text::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.8),transparent);
+      background-size: 200% 100%;
+      animation: shimmer 2s infinite;
+      pointer-events: none;
+    }
+
+    /* Enhanced Glassmorphic effect for AI Assistant/Rubric */
+    .ai-feedback-container {
+        position: relative;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        background-color: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        z-index: 30;
+    }
+
+    .ai-feedback-container::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.25), transparent);
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
+    .fade-text {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .fade-text.visible {
+      opacity: 1;
+    }
+
+    @keyframes fadeSlideUp {
+      from {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-animate {
+      animation: fadeSlideUp 0.4s ease-out;
+    }
+
+    .toast-fade {
+      animation: fadeSlideUp 0.3s ease-out;
+    }
+
+    @keyframes slideOutLeft {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+    }
+
+    .slide-out-left {
+      animation: slideOutLeft 0.5s ease-in forwards;
+    }
+
+    /* Collapsible rubric */
+    .rubric-content-wrapper {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-out;
+    }
+
+    .rubric-content-wrapper.expanded {
+        max-height: 500px;
+        transition: max-height 0.7s ease-in;
+    }
+
+    .toggle-icon.expanded {
+        transform: rotate(180deg);
+    }
+    .toggle-icon {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    /* Profile Popup */
+    .profile-popup {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: 200px;
+      opacity: 0;
+      transform: scale(0.95);
+      transform-origin: top right;
+      transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+      pointer-events: none;
+      z-index: 40;
+    }
+
+    .profile-popup.active {
+      opacity: 80;
+      transform: scale(1);
+      pointer-events: all;
+    }
+
+    /* Class cards */
+    .glass-card-extreme {
+      background-color: transparent;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .glass-card-extreme::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.15), transparent);
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
+    /* Editor popups */
+    .editor-menu-popup {
+      position: absolute;
+      top: calc(100% + 8px);
+      z-index: 60;
+      padding: 0.75rem;
+      min-width: 150px;
+      opacity: 0;
+      transform: scale(0.95);
+      transform-origin: top right;
+      transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+      pointer-events: none;
+      background-color: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      border-radius: 0.75rem;
+    }
+
+    .editor-menu-popup.active {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: all;
+    }
+    
+    .toolbar-button.active {
+        background-color: rgba(59, 130, 246, 0.2);
+        color: #2563eb;
+    }
+
+    #font-menu-popup, #styleMenuPopup, #fontSizeMenuPopup {
+        left: 0;
+        right: auto;
+        transform-origin: top left;
+    }
+    #moreMenuPopup {
+        left: auto;
+        right: 0;
+        transform-origin: top right;
+    }
+
+    /* Modals */
+    .editor-modal {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .editor-modal.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .editor-modal-content {
+        background-color: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        width: 90%;
+        max-width: 400px;
+        transform: translateY(-20px);
+        transition: transform 0.3s ease;
+    }
+
+    .editor-modal.active .editor-modal-content {
+        transform: translateY(0);
+    }
+
+    /* Smooth transition for body background */
+    body {
+        transition: background-image 2s ease-in-out;
+    }
+    
+    /* New class progress indicators */
+    .progress-bar {
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.2);
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4f46e5, #7c3aed);
+      border-radius: 3px;
+    }
+    
+    .class-badge {
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+    
+    .assignment-chip {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      margin-top: 8px;
+    }
+    .glass-layer::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.15), transparent);
+    pointer-events: none;
+    border-radius: inherit;
+  }
+  @keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.slide-in-right {
+  animation: slideInRight 0.6s ease-out forwards;
+}
+
+.slide-out-right {
+  animation: slideOutRight 0.5s ease-in forwards;
+}
+  </style>
+</head>
+
+<body class="min-h-screen text-gray-900 font-sans" style="background-image: linear-gradient(to bottom right, #eff6ff, #dbeafe);">
+  <div class="animated-background">
+    <div class="blob blob-one"></div>
+    <div class="blob blob-two"></div>
+    <div class="blob blob-three"></div>
+  </div>
+
+  <div class="container mx-auto p-6 flex">
+    </div>
+  <header class="fixed top-0 w-full z-50 backdrop-blur-glass glass-layer bg-white/10 ring-1 ring-white/10 shadow-sm">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center relative">
+      <div class="text-xl font-semibold tracking-tight">Acadex Mini</div>
+      <div class="text-md font-medium">My Learning</div>
+        <img id="profile-pic" src="https://via.placeholder.com/32" alt="Profile" class="rounded-full w-8 h-8 ring-1 ring-white/20 shadow-md cursor-pointer" onclick="toggleProfilePopup()" />
+        <div id="profile-popup" class="profile-popup bg-white/10 backdrop-blur-glass glass-layer ring-1 ring-white/10 rounded-xl p-4 shadow-xl hidden">
+            <img id="profile-pic-in-popup" src="https://via.placeholder.com/64" alt="Profile" class="w-16 h-16 rounded-full mx-auto mb-4 block ring-2 ring-gray-400 cursor-pointer" onclick="document.getElementById('profilePicInput').click();">
+            <p class="text-gray-800 text-sm font-semibold text-center mb-2">Student Name</p>
+            <p class="text-gray-600 text-xs text-center mb-4">student.email@example.com</p>
+            <hr class="border-gray-300 mb-4">
+            <ul class="space-y-2 mb-4">
+                <li><a href="#" class="text-gray-800 hover:text-blue-600 text-sm block px-2 py-1 rounded">Settings</a></li>
+                <li><a href="#" class="text-gray-800 hover:text-blue-600 text-sm block px-2 py-1 rounded">Help</a></li>
+                <li><a href="#" class="text-red-600 hover:text-red-700 text-sm block px-2 py-1 rounded">Logout</a></li>
+            </ul>
+
+            <hr class="border-gray-300 mb-4">
+            <h4 class="text-gray-800 text-sm font-semibold text-center mb-2">Background Theme</h4>
+            <div class="flex flex-wrap justify-center gap-3">
+                <label for="bg-default-blue" class="cursor-pointer group" title="Default Blue">
+                    <input type="radio" id="bg-default-blue" name="background-theme" value="default-blue" class="sr-only" checked>
+                    <div class="w-8 h-8 rounded-md shadow-md transition-all duration-200 flex items-center justify-center
+                                 group-hover:ring-2 group-hover:ring-blue-400
+                                 group-has-[:checked]:ring-2 group-has-[:checked]:ring-blue-700 group-has-[:checked]:ring-offset-2"
+                         style="background-image: linear-gradient(to bottom right, #eff6ff, #dbeafe);">
+                    </div>
+                </label>
+                <label for="bg-soft-pinks" class="cursor-pointer group" title="Soft Pinks & Peaches">
+                    <input type="radio" id="bg-soft-pinks" name="background-theme" value="soft-pinks" class="sr-only">
+                    <div class="w-8 h-8 rounded-md shadow-md transition-all duration-200 flex items-center justify-center
+                                 group-hover:ring-2 group-hover:ring-pink-400
+                                 group-has-[:checked]:ring-2 group-has-[:checked]:ring-pink-700 group-has-[:checked]:ring-offset-2"
+                         style="background-image: linear-gradient(to bottom right, #fce7f3, #fff7ed);">
+                    </div>
+                </label>
+                <label for="bg-sunrise-hues-1" class="cursor-pointer group" title="Sunrise Hues (Yellow-Orange)">
+                    <input type="radio" id="bg-sunrise-hues-1" name="background-theme" value="sunrise-hues-1" class="sr-only">
+                    <div class="w-8 h-8 rounded-md shadow-md transition-all duration-200 flex items-center justify-center
+                                 group-hover:ring-2 group-hover:ring-yellow-400
+                                 group-has-[:checked]:ring-2 group-has-[:checked]:ring-orange-700 group-has-[:checked]:ring-offset-2"
+                         style="background-image: linear-gradient(to bottom right, #fefce8, #fff7ed);">
+                    </div>
+                </label>
+                <label for="bg-coastal-vibes-1" class="cursor-pointer group" title="Coastal Vibes (Teal-Blue)">
+                    <input type="radio" id="bg-coastal-vibes-1" name="background-theme" value="coastal-vibes-1" class="sr-only">
+                    <div class="w-8 h-8 rounded-md shadow-md transition-all duration-200 flex items-center justify-center
+                                 group-hover:ring-2 group-hover:ring-teal-400
+                                 group-has-[:checked]:ring-2 group-has-[:checked]:ring-blue-700 group-has-[:checked]:ring-offset-2"
+                         style="background-image: linear-gradient(to bottom right, #ccfbf1, #dbeafe);">
+                    </div>
+                </label>
+                <label for="bg-garden-fresh-1" class="cursor-pointer group" title="Garden Fresh (Green-Lime)">
+                    <input type="radio" id="bg-garden-fresh-1" name="background-theme" value="garden-fresh-1" class="sr-only">
+                    <div class="w-8 h-8 rounded-md shadow-md transition-all duration-200 flex items-center justify-center
+                                 group-hover:ring-2 group-hover:ring-green-400
+                                 group-has-[:checked]:ring-2 group-has-[:checked]:ring-lime-700 group-has-[:checked]:ring-offset-2"
+                         style="background-image: linear-gradient(to bottom right, #f0fdf4, #f7fee7);">
+                    </div>
+                </label>
+                <label for="bg-lavender-fields-1" class="cursor-pointer group" title="Lavender Fields (Purple-Pink)">
+                    <input type="radio" id="bg-lavender-fields-1" name="background-theme" value="lavender-fields-1" class="sr-only">
+                    <div class="w-8 h-8 rounded-md shadow-md transition-all duration-200 flex items-center justify-center
+                                 group-hover:ring-2 group-hover:ring-purple-400
+                                 group-has-[:checked]:ring-2 group-has-[:checked]:ring-pink-700 group-has-[:checked]:ring-offset-2"
+                         style="background-image: linear-gradient(to bottom right, #faf5ff, #fce7f3);">
+                    </div>
+                </label>
+            
+          </div>
+
+            <hr class="border-gray-300 mb-4 mt-4">
+            <h4 class="text-gray-800 text-sm font-semibold text-center mb-2">Background Design</h4>
+            <div class="flex flex-wrap justify-center gap-3">
+                <label for="bg-energetic-blue" class="cursor-pointer group" title="Energetic Whites - Blue">
+                    <input type="radio" id="bg-energetic-blue" name="background-theme" value="energetic-blue" class="sr-only">
+                    <div class="w-8 h-8 rounded-md shadow-md transition-all duration-200 flex items-center justify-center
+                                 group-hover:ring-2 group-hover:ring-blue-400
+                                 group-has-[:checked]:ring-2 group-has-[:checked]:ring-blue-700 group-has-[:checked]:ring-offset-2"
+                         style="background-image: linear-gradient(to bottom right, #ffffff, #ffffff, #bfdbfe);">
+                    </div>
+                </label>
+                <label for="bg-energetic-pink" class="cursor-pointer group" title="Energetic Whites - Pink">
+                    <input type="radio" id="bg-energetic-pink" name="background-theme" value="energetic-pink" class="sr-only">
+                    <div class="w-8 h-8 rounded-md shadow-md transition-all duration-200 flex items-center justify-center
+                                 group-hover:ring-2 group-hover:ring-pink-400
+                                 group-has-[:checked]:ring-2 group-has-[:checked]:ring-pink-700 group-has-[:checked]:ring-offset-2"
+                         style="background-image: linear-gradient(to bottom right, #ffffff, #ffffff, #fbcfe8);">
+                    </div>
+                </label>
+                <label for="bg-single-red-stripe" class="cursor-pointer group" title="Single Red Stripe">
+                    <input type="radio" id="bg-single-red-stripe" name="background-theme" value="single-red-stripe" class="sr-only">
+                    <div class="w-8 h-8 rounded-md shadow-md transition-all duration-200 flex items-center justify-center
+                                 group-hover:ring-2 group-hover:ring-red-400
+                                 group-has-[:checked]:ring-2 group-has-[:checked]:checked:ring-red-700 group-has-[:checked]:ring-offset-2"
+                         style="background-image: linear-gradient(to bottom right, white 40%, rgb(239, 68, 68) 40%, rgb(239, 68, 68) 60%, white 60%);">
+                    </div>
+                </label>
+                <label for="bg-dual-blue-stripes" class="cursor-pointer group" title="Dual Blue Stripes">
+                    <input type="radio" id="bg-dual-blue-stripes" name="background-theme" value="dual-blue-stripes" class="sr-only">
+                    <div class="w-8 h-8 rounded-md shadow-md transition-all duration-200 flex items-center justify-center
+                                 group-hover:ring-2 group-hover:ring-blue-400
+                                 group-has-[:checked]:ring-2 group-has-[:checked]:ring-blue-700 group-has-[:checked]:ring-offset-2"
+                         style="background-image: linear-gradient(to bottom right, white 30%, rgb(59, 130, 246) 30%, rgb(59, 130, 246) 40%, white 40%, white 60%, rgb(59, 130, 246) 60%, rgb(59, 130, 246) 70%, white 70%);">
+                    </div>
+                </label>
+                <label for="bg-abstract-blurs" class="cursor-pointer group" title="Abstract Blurs">
+                    <input type="radio" id="bg-abstract-blurs" name="background-theme" value="abstract-blurs" class="sr-only">
+                    <div class="w-8 h-8 rounded-md shadow-md transition-all duration-200 flex items-center justify-center
+                                 group-hover:ring-2 group-hover:ring-purple-400
+                                 group-has-[:checked]:ring-2 group-has-[:checked]:ring-purple-700 group-has-[:checked]:ring-offset-2"
+                         style="background-image: radial-gradient(circle at 20% 30%, rgba(255, 255, 153, 0.1) 0%, transparent 40%), radial-gradient(circle at 70% 60%, rgba(255, 192, 203, 0.1) 0%, transparent 40%), radial-gradient(circle at 50% 10%, rgba(173, 216, 230, 0.1) 0%, transparent 40%);">
+                    </div>
+                </label>
+            </div>
+            
+        </div>
+        <input type="file" id="profilePicInput" accept="image/*" class="hidden">
+      </div>
+    </header>
+
+  <main id="app" class="pt-24 px-6 max-w-7xl mx-auto">
+    <div id="qr-modal" class="fixed inset-0 bg-black/30 flex items-center justify-center z-50 hidden">
+      <div class="modal-box relative bg-white/10 backdrop-blur-glass glass-layer ring-1 ring-white/10 shadow-xl rounded-2xl w-full max-w-md p-6">
+        <button onclick="closeQRModal()" class="absolute top-3 right-4 text-white text-xl">&times;</button>
+        <h3 class="text-xl font-semibold text-white mb-4">Join a Class</h3>
+  
+        <div class="flex flex-col items-center justify-center">
+          <div class="bg-white w-40 h-40 rounded-xl flex items-center justify-center mb-4 shadow-inner">
+            <span class="text-gray-500">QR Code</span>
+          </div>
+          <p class="text-sm text-gray-300 text-center mb-2">Scan this with your class device or wait...</p>
+          <button onclick="simulateQRSuccess()" class="text-xs text-blue-300 underline mb-4">Simulate QR Success</button>
+        </div>
+  
+        <div id="qr-fallback" class="hidden mt-6">
+          <label class="block text-white text-sm mb-2">Or enter Class Code:</label>
+          <input type="text" placeholder="e.g. ENG101-AXZ" class="w-full px-4 py-2 rounded-lg bg-white/20 text-white placeholder-gray-300 focus:outline-none">
+          <button onclick="simulateQRSuccess()" class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg">Join</button>
+        </div>
+      </div>
+    </div>
+  
+    <section id="dashboard" class="space-y-12">
+      <h2 class="text-2xl font-semibold mb-4">My Classes</h2>
+      <!--Data Snapshot-->
+      <div class="data-summary-card bg-white/30 backdrop-blur-glass rounded-lg shadow-lg p-6 mb-6 border border-white border-opacity-20 relative glass-layer">
+        <h5 class="text-lg font-bold mb-4 text-gray-800 hidden">My Performance Snapshot</h5>
+    
+        <div class="flex items-center justify-around w-full">
+            <div class="flex flex-col items-center mx-2 text-center">
+                <span class="font-semibold text-xs text-gray-600">Avg. Grade</span>
+                <span class="text-blue-600 font-bold text-base">A-</span>
+            </div>
+            <div class="flex flex-col items-center mx-2 text-center">
+                <span class="font-semibold text-xs text-gray-600">Completed</span>
+                <span class="text-green-600 font-bold text-base">15</span>
+            </div>
+            <div class="flex flex-col items-center mx-2 text-center">
+                <span class="font-semibold text-xs text-gray-600">Due</span>
+                <span class="text-red-600 font-bold text-base">3</span>
+            </div>
+            <div class="flex flex-col items-center mx-2 text-center">
+                <span class="font-semibold text-xs text-gray-600">Freq. Class</span>
+                <span class="text-purple-600 font-bold text-base">Math I</span>
+            </div>
+        </div>
+    </div>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="classes-grid">
+        <!-- Classes will be dynamically populated here -->
+      </div>
+
+      <button onclick="openQRModal()" aria-label="Add Class" class="fixed bottom-10 right-10 z-50 bg-blue-600 hover:bg-blue-700 text-white rounded-full w-14 h-14 text-3xl shadow-xl backdrop-blur-glass glass-layer ring-1 ring-white/10 hover:shadow-2xl transition-all duration-300">
+        +
+      </button>
+    </section>
+
+    <section id="class-details" class="hidden space-y-12">
+      <button onclick="goToDashboard()" class="text-sm text-blue-600 hover:underline">&#x2190; Back to Classes</button>
+      <h2 id="class-title" class="text-2xl font-semibold mb-4">English 101 Assignments</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="assignments-grid">
+        <!-- Assignments will be dynamically populated here -->
+      </div>
+    </section>
+
+    <section id="workspace" class="hidden">
+      <div class="text-center mb-4">
+        <button onclick="goToClassDetails()" class="text-sm text-blue-600 hover:underline absolute left-6">&#x2190; Back</button>
+        <h1 id="assignmentTitleDisplay" class="text-2xl font-semibold">Research Essay: Climate Change</h1>
+      </div>
+
+      <div class="sticky top-20 z-40 mx-auto max-w-4xl mb-4 bg-white/10 backdrop-blur-glass glass-layer ring-1 ring-white/10 shadow-sm rounded-xl p-3 flex flex-wrap justify-between items-center">
+        <div class="flex items-center gap-2">
+          <div class="relative">
+            <button id="styleButton" class="px-3 py-1.5 hover:bg-white/20 rounded-md text-sm">Body</button>
+            <div id="styleMenuPopup" class="editor-menu-popup hidden">
+              <ul class="space-y-1 text-sm text-gray-800">
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20" data-format="formatBlock" data-value="p">Body</button></li>
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20 font-bold text-xl" data-format="formatBlock" data-value="h1">Title</button></li>
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20 font-semibold text-lg" data-format="formatBlock" data-value="h2">Subtitle</button></li>
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20 font-bold text-lg" data-format="formatBlock" data-value="h1">Heading 1</button></li>
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20 font-semibold" data-format="formatBlock" data-value="h2">Heading 2</button></li>
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20" data-format="formatBlock" data-value="h3">Heading 3</button></li>
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20 text-sm" data-format="formatBlock" data-value="h4">Heading 4</button></li>
+              </ul>
+            </div>
+          </div>
+          <button id="boldButton" data-command="bold" class="toolbar-button p-2 hover:bg-white/20 rounded-md" title="Bold">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a1 1 0 00-1 1v1.5H7a2.5 2.5 0 00-2.5 2.5V15.5A2.5 2.5 0 007 18h2.5a2.5 2.5 0 002.5-2.5V12A2.5 2.5 0 009.5 9.5H8V6.5h1.5a2.5 2.5 0 002.5-2.5V3a1 1 0 00-1-1h-1zM7.5 16A1.5 1.5 0 016 14.5v-6A1.5 1.5 0 017.5 7h1v2.5H7a1.5 1.5 0 000 3h2.5V16h-2z"/></svg>
+          </button>
+          <button id="italicButton" data-command="italic" class="toolbar-button p-2 hover:bg-white/20 rounded-md" title="Italic">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M12.25 3.125a.75.75 0 00-1.5 0v1.169l-3.02 9.438H6.5a.75.75 0 000 1.5h4.25a.75.75 0 000-1.5v-1.169l3.02-9.438H15.5a.75.75 0 000-1.5h-3.25z"/></svg>
+          </button>
+          <button id="underlineButton" data-command="underline" class="toolbar-button p-2 hover:bg-white/20 rounded-md" title="Underline">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a1 1 0 00-1 1v7a4 4 0 008 0V4a1 1 0 10-2 0v7a2 2 0 11-4 0V4a1 1 0 00-1-1zM4 16a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1z"/></svg>
+          </button>
+          <button id="strikeButton" data-command="strikeThrough" class="toolbar-button p-2 hover:bg-white/20 rounded-md" title="Strikethrough">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 4.293a1 1 0 011.414 0l2 2a1 1 0 01-1.414 1.414L13 6.414l-1.293 1.293a1 1 0 01-1.414-1.414l2-2zM7.707 15.707a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L7 13.586l1.293-1.293a1 1 0 011.414 1.414l-2 2zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
+          </button>
+          <button id="leftButton" data-command="justifyLeft" class="toolbar-button p-2 hover:bg-white/20 rounded-md" title="Align Left">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" /></svg>
+          </button>
+          <button id="centerButton" data-command="justifyCenter" class="toolbar-button p-2 hover:bg-white/20 rounded-md" title="Center Text">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M2 5a1 1 0 011-1h14a1 1 0 110 2H3a1 1 0 01-1-1zm0 4a1 1 0 011-1h14a1 1 0 110 2H3a1 1 0 01-1-1zm2 4a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zm-2 4a1 1 0 011-1h14a1 1 0 110 2H3a1 1 0 01-1-1z" clip-rule="evenodd" /></svg>
+          </button>
+          <button id="rightButton" data-command="justifyRight" class="toolbar-button p-2 hover:bg-white/20 rounded-md" title="Align Right">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" /></svg>
+          </button>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="relative">
+            <button id="fontButton" class="px-3 py-1.5 hover:bg-white/20 rounded-md text-sm">SF Pro Display</button>
+            <div id="fontMenuPopup" class="editor-menu-popup hidden">
+              <ul class="space-y-1 text-sm text-gray-800">
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20" data-font="Arial">Arial</button></li>
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20" data-font="Verdana">Verdana</button></li>
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20" data-font="Georgia">Georgia</button></li>
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20" data-font="Times New Roman">Times New Roman</button></li>
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20" data-font="Roboto">Roboto</button></li>
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20" data-font="Open Sans">Open Sans</button></li>
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20" data-font="Inter">Inter</button></li>
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20" data-font="SF Pro Display">SF Pro Display</button></li>
+              </ul>
+            </div>
+          </div>
+          <div class="relative">
+            <button id="fontSizeButton" class="px-3 py-1.5 hover:bg-white/20 rounded-md text-sm">14pt</button>
+            <div id="fontSizeMenuPopup" class="editor-menu-popup hidden">
+              <ul class="space-y-1 text-sm text-gray-800">
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20" data-size="1">8pt</button></li>
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20" data-size="2">10pt</button></li>
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20" data-size="3">12pt</button></li>
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20" data-size="4">14pt</button></li>
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20" data-size="5">16pt</button></li>
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20" data-size="6">18pt</button></li>
+                <li><button class="block w-full text-left px-2 py-1 rounded hover:bg-white/20" data-size="7">24pt</button></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="relative flex items-center gap-2">
+            <button id="linkButton" class="p-2 hover:bg-white/20 rounded-md" title="Insert Link">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd" /></svg>
+            </button>
+            <button id="imageButton" class="p-2 hover:bg-white/20 rounded-md" title="Insert Image">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" /></svg>
+            </button>
+             <button id="moreMenuButton" class="p-2 hover:bg-white/20 rounded-md" title="More Options">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" /></svg>
+             </button>
+          <div id="moreMenuPopup" class="editor-menu-popup backdrop-blur-glass hidden">
+            <label for="textColor" class="block text-sm mb-2 text-gray-800">Text Color:</label>
+            <input type="color" id="textColor" class="w-full h-8 mb-4" title="Text Color" />
+            <label for="highlightColor" class="block text-sm mb-2 text-gray-800">Highlight Color:</label>
+            <input type="color" id="highlightColor" class="w-full h-8" title="Highlight Color" />
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-6 max-w-6xl mx-auto">
+        <!-- Editor Section (Left) -->
+        <section class="flex-1">
+          <div id="editor" class="editor-content bg-white rounded-xl shadow-inner" contenteditable="true">
+           
+          </div>
+          <div class="mt-4 flex justify-end gap-2">
+            <button id="finalFeedbackButton" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg">Get Final Feedback</button>
+            <button class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg">Submit</button>
+          </div>
+        </section>
+
+        <!-- AI Assistant and Rubric (Right) -->
+        <aside id="ai-assistant" class="w-1/4 hidden lg:block slide-in-right sticky top-24 h-fit">
+          <div class="ai-feedback-container shimmer-text">
+            <h4 class="text-lg font-bold mb-2 text-gray-800 flex items-center">
+              <i class="fas fa-thin fa-brain mr-2 text-blue-600 text-xl"></i> LISA
+            </h4>
+            <button id="helpMeButton" class="absolute top-2 right-2 bg-blue-600 hover:bg-blue-600 text-white text-sm w-8 h-8 flex items-center justify-center rounded-full shadow-md backdrop-blur-glass glass-layer">
+              <i class="fas fa-person-chalkboard"></i>
+            </button>
+            <p id="ai-text" class="text-sm italic text-gray-600"></p>
+          </div>
+          <div id="rubricDisplay" class="ai-feedback-container mt-6 p-4">
+            <h4 class="text-sm font-semibold mb-2 flex justify-between items-center cursor-pointer" id="toggleRubricBtn">
+                <span class="text-gray-800">Rubric</span>
+                <svg id="rubricToggleIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 toggle-icon" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </h4>
+            <div id="rubricContentWrapper" class="rubric-content-wrapper">
+                <div class="text-xs text-gray-700 pt-2" id="rubricContent"></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <div id="linkModal" class="editor-modal">
+    <div class="editor-modal-content bg-white/10 backdrop-blur-glass glass-layer ring-1 ring-white/10 rounded-xl p-6">
+      <h3 class="text-lg font-semibold mb-4 text-white">Insert Link</h3>
+      <input type="text" id="linkUrlInput" placeholder="Enter URL (e.g., https://example.com)" class="w-full px-4 py-2 rounded-lg bg-white/20 text-white placeholder-gray-300 focus:outline-none mb-4">
+      <div class="flex justify-end gap-2">
+        <button id="cancelLinkButton" class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800">Cancel</button>
+        <button id="insertLinkButton" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white">Insert</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="imageModal" class="editor-modal">
+    <div class="editor-modal-content bg-white/10 backdrop-blur-glass glass-layer ring-1 ring-white/10 rounded-xl p-6">
+      <h3 class="text-lg font-semibold mb-4 text-white">Insert Image</h3>
+      <input type="text" id="imageUrlInput" placeholder="Enter Image URL" class="w-full px-4 py-2 rounded-lg bg-white/20 text-white placeholder-gray-300 focus:outline-none mb-4">
+      <div class="text-center mb-4">
+        <span class="text-gray-300">OR</span>
+      </div>
+      <input type="file" id="imageFileInput" accept="image/*" class="w-full text-sm text-gray-300
+            file:mr-4 file:py-2 file:px-4
+            file:rounded-full file:border-0
+            file:text-sm file:font-semibold
+            file:bg-blue-50 file:text-blue-700
+            hover:file:bg-blue-100 mb-4 cursor-pointer"/>
+      <div class="flex justify-end gap-2">
+        <button id="cancelImageButton" class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800">Cancel</button>
+        <button id="insertImageButton" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white">Insert</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Constants for Backend Communication and AI Logic
+  const LISA_API_ENDPOINT = 'http://127.0.0.1:5001/lisa_prompt';
+  
+  // Class data structure with assignments and rubrics
+  const classesData = [
+    {
+      id: "math101",
+      name: "Mathematics",
+      teacher: "Dr. Alan Turing",
+      progress: 65,
+      assignments: [
+        {
+          id: "math-assign1",
+          title: "Linear Algebra Problems",
+          dueDate: "June 20, 2025",
+          status: "In Progress",
+          rubric: `
+**Problem Solving (40%)**
+- Correctly identifies the problem type and selects appropriate solution method
+- Shows all intermediate steps in the solution process
+- Demonstrates understanding of linear transformations
+
+**Accuracy (30%)**
+- Correctly solves equations and systems of equations
+- Minimal calculation errors in matrix operations
+- Proper application of determinants and eigenvalues
+
+**Explanation (30%)**
+- Clearly explains the reasoning behind each solution step
+- Provides context for the mathematical concepts applied
+- Justifies solutions with appropriate mathematical reasoning
+`
+        },
+        {
+          id: "math-assign2",
+          title: "Calculus Optimization",
+          dueDate: "July 5, 2025",
+          status: "Not Started",
+          rubric: `
+**Problem Formulation (30%)**
+- Correctly identifies objective function and constraints
+- Sets up appropriate equations for optimization problems
+
+**Solution Technique (40%)**
+- Applies correct calculus methods (derivatives, integrals)
+- Demonstrates understanding of critical points and optimization
+
+**Real-world Application (30%)**
+- Relates mathematical solutions to practical scenarios
+- Discusses limitations and assumptions of the model
+`
+        }
+      ]
+    },
+    {
+      id: "science201",
+      name: "Physics",
+      teacher: "Prof. Marie Curie",
+      progress: 40,
+      assignments: [
+        {
+          id: "physics-assign1",
+          title: "Quantum Mechanics Report",
+          dueDate: "June 25, 2025",
+          status: "Submitted",
+          rubric: `
+**Concept Understanding (40%)**
+- Accurately explains quantum phenomena and principles
+- Demonstrates understanding of wave-particle duality
+- Describes key experiments and their implications
+
+**Mathematical Formulation (30%)**
+- Correctly applies Schrödinger equation to simple systems
+- Solves basic quantum mechanical problems
+- Interprets wave functions and probabilities
+
+**Critical Analysis (30%)**
+- Evaluates implications of quantum mechanics
+- Discusses philosophical implications of quantum theory
+- Compares classical and quantum approaches
+`
+        }
+      ]
+    },
+    {
+      id: "bio301",
+      name: "Biology",
+      teacher: "Dr. Charles Darwin",
+      progress: 80,
+      assignments: [
+        {
+          id: "bio-assign1",
+          title: "Evolutionary Biology Essay",
+          dueDate: "June 18, 2025",
+          status: "Graded: A",
+          rubric: `
+**Content Accuracy (40%)**
+- Correctly explains evolutionary mechanisms (natural selection, genetic drift)
+- Demonstrates understanding of speciation processes
+- Accurately describes evidence for evolution
+
+**Case Studies (30%)**
+- Analyzes specific evolutionary case studies
+- Compares different evolutionary scenarios
+- Discusses contemporary examples of evolution
+
+**Critical Thinking (30%)**
+- Evaluates challenges to evolutionary theory
+- Discusses evolutionary medicine applications
+- Analyzes societal implications of evolutionary biology
+`
+        },
+        {
+          id: "bio-assign2",
+          title: "Genetics Lab Report",
+          dueDate: "July 10, 2025",
+          status: "Not Started",
+          rubric: `
+**Experimental Design (30%)**
+- Clearly states hypothesis and experimental approach
+- Designs appropriate controls and variables
+
+**Data Analysis (40%)**
+- Accurately analyzes genetic data
+- Correctly applies statistical methods
+- Properly interprets results
+
+**Conclusion (30%)**
+- Draws valid conclusions from experimental data
+- Discusses limitations and potential improvements
+- Relates findings to broader genetic principles
+`
+        }
+      ]
+    },
+    {
+      id: "history401",
+      name: "World History",
+      teacher: "Prof. Howard Zinn",
+      progress: 25,
+      assignments: [
+        {
+          id: "history-assign1",
+          title: "Industrial Revolution Analysis",
+          dueDate: "June 30, 2025",
+          status: "In Progress",
+          rubric: `
+**Historical Context (30%)**
+- Accurately describes pre-industrial societies
+- Explains factors leading to industrialization
+- Places industrial revolution in global context
+
+**Impact Analysis (40%)**
+- Evaluates social and economic consequences
+- Analyzes environmental impact
+- Discusses technological innovations
+
+**Historiography (30%)**
+- Compares different historical interpretations
+- Critically evaluates primary and secondary sources
+- Develops original thesis supported by evidence
+`
+        }
+      ]
+    },
+    {
+      id: "business501",
+      name: "Business Management",
+      teacher: "Dr. Peter Drucker",
+      progress: 50,
+      assignments: [
+        {
+          id: "business-assign1",
+          title: "Strategic Marketing Plan",
+          dueDate: "July 3, 2025",
+          status: "In Review",
+          rubric: `
+**Market Analysis (30%)**
+- Conducts thorough market research
+- Identifies target audience and segments
+- Analyzes competitive landscape
+
+**Strategy Development (40%)**
+- Develops coherent marketing strategy
+- Proposes appropriate marketing mix (4Ps)
+- Sets measurable objectives and KPIs
+
+**Implementation Plan (30%)**
+- Creates realistic timeline and budget
+- Identifies required resources
+- Proposes evaluation metrics for success
+`
+        },
+        {
+          id: "business-assign2",
+          title: "Financial Analysis Case Study",
+          dueDate: "July 15, 2025",
+          status: "Not Started",
+          rubric: `
+**Financial Statement Analysis (40%)**
+- Correctly interprets balance sheets, income statements
+- Calculates key financial ratios accurately
+- Identifies financial strengths and weaknesses
+
+**Valuation (30%)**
+- Applies appropriate valuation methods
+- Makes reasonable assumptions for projections
+- Justifies valuation conclusions
+
+**Strategic Recommendations (30%)**
+- Develops actionable recommendations
+- Considers risk factors and mitigation strategies
+- Aligns recommendations with business objectives
+`
+        }
+      ]
+    }
+  ];
+  
+  // Global variables
+  let currentAssignmentData = null;
+  let currentClassData = null;
+  
+  const INACTIVITY_THRESHOLD_LONG = 15000;
+  const PARAGRAPH_END_PAUSE_THRESHOLD = 2000;
+  const SENTENCE_END_PAUSE_THRESHOLD = 800;
+  
+  // DOM Elements
+  let dashboard;
+  let classDetails;
+  let workspace;
+  let assistant;
+  let aiText;
+  let editor;
+  let assignmentTitleDisplay;
+  let rubricContentDisplay;
+  let rubricContentWrapper;
+  let toggleRubricBtn;
+  let finalFeedbackButton;
+  let profilePopup;
+  let profilePic;
+  let profilePicInPopup;
+  let profilePicInput;
+
+  // Editor elements
+  let styleButton;
+  let styleMenuPopup;
+  let fontButton;
+  let fontMenuPopup;
+  let fontSizeButton;
+  let fontSizeMenuPopup;
+  let moreMenuButton;
+  let moreMenuPopup;
+  let linkButton;
+  let imageButton;
+  let boldButton, italicButton, underlineButton, strikeButton, centerButton;
+  let leftButton, rightButton; // New alignment buttons
+
+  // Modal elements
+  let linkModal;
+  let linkUrlInput;
+  let insertLinkButton;
+  let cancelLinkButton;
+  let imageModal;
+  let imageUrlInput;
+  let imageFileInput;
+  let insertImageButton;
+  let cancelImageButton;
+
+  // State variables for AI Logic
+  let typingTimer;
+  let previousEditorContentForLisa = ""; 
+  let lastParagraphCount = 0; 
+  let initialLoadDone = false; 
+  let hasRecentlyCompletedSentence = false; 
+  let currentEditorContent = ""; 
+
+  // Utility Functions
+  function getAssignmentShortName(fullTitle) {
+      const parts = fullTitle.split(':');
+      if (parts.length > 1) {
+          return parts[1].trim() + " assignment";
+      }
+      return fullTitle + " assignment";
+  }
+
+  function formatRubricPointForDisplay(point) {
+      let cleanPoint = point.replace(/\(\d+%\)/g, '').trim();
+      cleanPoint = cleanPoint.replace(/^- /, '').trim();
+      cleanPoint = cleanPoint.replace(/^\d+\. /, '').trim();
+      return cleanPoint;
+  }
+
+  // Navigation Functions
+  function goToClassDetails(classData) {
+    currentClassData = classData;
+    dashboard.classList.add('hidden');
+    workspace.classList.add('hidden');
+    classDetails.classList.remove('hidden');
+    
+    // Update class title
+    document.getElementById('class-title').textContent = `${classData.name} Assignments`;
+    
+    // Render assignments
+    const assignmentsGrid = document.getElementById('assignments-grid');
+    assignmentsGrid.innerHTML = '';
+    
+    classData.assignments.forEach((assignment, index) => {
+      const assignmentCard = document.createElement('button');
+      assignmentCard.className = 'bg-white/10 backdrop-blur-glass glass-layer ring-1 ring-white/10 rounded-2xl p-6 shadow-md transition transform hover:-translate-y-1 hover:scale-105 hover:shadow-2xl w-full text-left';
+      assignmentCard.onclick = () => goToWorkspace(assignment);
+      
+      // Status chip styling
+      let statusClass = "bg-yellow-500/20 text-yellow-700";
+      if (assignment.status.includes("Graded")) statusClass = "bg-green-500/20 text-green-700";
+      else if (assignment.status.includes("Submitted")) statusClass = "bg-blue-500/20 text-blue-700";
+      else if (assignment.status.includes("Not Started")) statusClass = "bg-gray-500/20 text-gray-700";
+      
+      assignmentCard.innerHTML = `
+        <h3 class="text-lg font-semibold mb-1">${assignment.title}</h3>
+        <p class="text-sm text-gray-500 mb-2">Due: ${assignment.dueDate}</p>
+        <p class="text-sm font-light mb-4">Status: <span class="${statusClass} assignment-chip">${assignment.status}</span></p>
+        <div class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg">Continue Work</div>
+      `;
+      
+      assignmentsGrid.appendChild(assignmentCard);
+    });
+    
+    clearTimeout(typingTimer);
+    if (profilePopup && profilePopup.classList.contains('active')) {
+        profilePopup.classList.remove('active');
+        profilePopup.classList.add('hidden');
+    }
+    closeAllEditorPopups();
+    closeAllModals();
+  }
+  
+  function goToDashboard() {
+    classDetails.classList.add('hidden');
+    workspace.classList.add('hidden');
+    dashboard.classList.remove('hidden');
+    
+    renderDashboard();
+    
+    assistant.classList.remove('slide-in-right');
+    assistant.classList.add('slide-out-right');
+
+    setTimeout(() => {
+      assistant.classList.add('hidden');
+      aiText.textContent = "";
+      editor.innerHTML = "<p></p>";
+      initialLoadDone = false;
+      lastParagraphCount = 0;
+      previousEditorContentForLisa = '';
+      currentEditorContent = '';
+      hasRecentlyCompletedSentence = false;
+      clearTimeout(typingTimer);
+    }, 500);
+
+    if (profilePopup && profilePopup.classList.contains('active')) {
+        profilePopup.classList.remove('active');
+        profilePopup.classList.add('hidden');
+    }
+    closeAllEditorPopups();
+    closeAllModals();
+  }
+  
+  function renderDashboard() {
+    const classesGrid = document.getElementById('classes-grid');
+    classesGrid.innerHTML = '';
+    
+    classesData.forEach((classItem, index) => {
+      // Determine badge color based on progress
+      let badgeColor = "bg-blue-500/20 text-blue-700";
+      if (classItem.progress >= 80) badgeColor = "bg-green-500/20 text-green-700";
+      else if (classItem.progress >= 50) badgeColor = "bg-purple-500/20 text-purple-700";
+      else if (classItem.progress < 30) badgeColor = "bg-red-500/20 text-red-700";
+      
+      const classCard = document.createElement('button');
+      classCard.className = 'glass-card-extreme transition transform hover:-translate-y-1 hover:scale-105 hover:shadow-2xl rounded-2xl p-6 w-full text-left';
+      classCard.onclick = () => goToClassDetails(classItem);
+      
+      classCard.innerHTML = `
+        <div class="flex justify-between items-start">
+          <div>
+            <h3 class="text-xl font-semibold mb-1">${classItem.name}</h3>
+            <p class="text-sm font-light mb-2">${classItem.teacher}</p>
+          </div>
+          <span class="${badgeColor} class-badge">${classItem.progress}% Complete</span>
+        </div>
+        <div class="mt-4">
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${classItem.progress}%"></div>
+          </div>
+        </div>
+        <div class="text-sm mt-3">${classItem.assignments.length} Assignment${classItem.assignments.length !== 1 ? 's' : ''}</div>
+      `;
+      
+      classesGrid.appendChild(classCard);
+    });
+  }
+  
+  async function goToWorkspace(assignment) {
+    currentAssignmentData = assignment;
+    classDetails.classList.add('hidden');
+    workspace.classList.remove('hidden');
+
+    assistant.classList.remove('hidden');
+    assistant.classList.remove('slide-out-right');
+    assistant.classList.add('slide-in-right');
+
+    assignmentTitleDisplay.textContent = assignment.title;
+    rubricContentDisplay.innerHTML = formatRubric(assignment.rubric);
+
+    rubricContentWrapper.classList.remove('expanded');
+    document.getElementById('rubricToggleIcon').classList.remove('expanded');
+
+    if (editor.innerHTML.trim() === "" || editor.innerHTML.trim() === "<p>Start writing here...</p>") {
+        editor.innerHTML = "<p></p>";
+    }
+    
+    currentEditorContent = editor.textContent || '';
+    previousEditorContentForLisa = ""; 
+
+    console.log(`Loading workspace for assignment: ${assignment.title}`);
+
+    // Make initial call to LISA on workspace load
+    try {
+      console.log("Making initial LISA prompt request on page load...");
+      const initialLisaResponse = await getLisaPrompt(
+          "", // No user text initially
+          assignment.title,
+          assignment.rubric,
+          false, // inactivity_timer_fired
+          false, // paragraph_finished
+          false, // sentence_finished
+          "", // previous_user_text (empty initially)
+          false, // recent_sentence_completed
+          false  // assignment_complete (false for initial prompt)
+      );
+      typeAIMessage(initialLisaResponse, "ai-text"); 
+    } catch (error) {
+      console.error("Error fetching initial LISA prompt:", error);
+      typeAIMessage("LISA is currently unavailable. Please try again later.", "ai-text");
+    }
+
+    previousEditorContentForLisa = currentEditorContent; 
+    initialLoadDone = true; 
+    console.log("Initial LISA prompt sent and initialLoadDone set to true.");
+
+    if (profilePopup && profilePopup.classList.contains('active')) {
+        profilePopup.classList.remove('active');
+        profilePopup.classList.add('hidden');
+    }
+    closeAllEditorPopups();
+    closeAllModals();
+  }
+
+  function formatRubric(rubricText) {
+    let formattedText = rubricText;
+    formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); 
+    formattedText = formattedText.replace(/^- (.*)/gm, '<li class="ml-4 mb-1">$1</li>'); 
+    formattedText = `<ul>${formattedText}</ul>`; 
+    return formattedText;
+  }
+  
+  // AI Interaction Logic
+  async function getLisaPrompt(userText, assignmentTitle, rubric, inactivityFired, paragraphFinished, sentenceFinished, previousUserText, recentSentenceCompleted, assignmentComplete = false) {
+    console.log("--- Calling getLisaPrompt ---");
+    console.log("Assignment Title:", assignmentTitle);
+    console.log("Rubric Length:", rubric.length);
+    console.log("userText (len:", userText.length, "):", userText.slice(0, 50), "...");
+    console.log("previousUserText (len:", previousUserText.length, "):", previousUserText.slice(0, 50), "...");
+    console.log("inactivityFired:", inactivityFired);
+    console.log("paragraphFinished:", paragraphFinished);
+    console.log("sentenceFinished:", sentenceFinished);
+    console.log("recentSentenceCompleted:", recentSentenceCompleted);
+    console.log("assignmentComplete:", assignmentComplete);
+    console.log("----------------------------");
+
+    try {
+      const response = await fetch(LISA_API_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          assignment_title: assignmentTitle,
+          rubric: rubric,
+          user_text: userText,
+          inactivity_timer_fired: inactivityFired,
+          paragraph_finished: paragraphFinished,
+          sentence_finished: sentenceFinished,
+          previous_user_text: previousUserText,
+          recent_sentence_completed: recentSentenceCompleted,
+          assignment_complete: assignmentComplete 
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Server error: ${response.status} - ${errorData.message || 'Unknown error'}`);
+      }
+
+      const data = await response.json();
+      return data.suggested_next_step;
+
+    } catch (error) {
+      console.error('Error fetching LISA prompt:', error);
+      return "LISA is currently unavailable. Please try again later. (Error contacting AI assistant)";
+    }
+  }
+  
+  async function handleEditorInput() {
+    console.log(">> handleEditorInput FIRED! <<");
+    clearTimeout(typingTimer); 
+
+    const newText = editor.textContent || '';
+    const currentHTML = editor.innerHTML;
+    const newParagraphCount = countParagraphs(currentHTML);
+
+    console.log("Current Text (length:", newText.length, "):", newText.slice(0, Math.min(newText.length, 70)), "...");
+    console.log("Previous Text (for LISA, length:", previousEditorContentForLisa.length, "):", previousEditorContentForLisa.slice(0, Math.min(previousEditorContentForLisa.length, 70)), "...");
+    console.log("Last P Count:", lastParagraphCount, "New P Count:", newParagraphCount);
+
+    const sentenceJustEnded = (newText.length > currentEditorContent.length) && /[.!?]\s*$/.test(newText.trim());
+    console.log("Sentence Just Ended:", sentenceJustEnded);
+
+    const textBeforeCurrentInput = currentEditorContent; 
+    currentEditorContent = newText; 
+
+    if (!initialLoadDone && newText.trim() === "") {
+        console.log("Skipping prompt on initial empty load.");
+        return; 
+    }
+
+    const textChangedSinceLastPrompt = newText !== previousEditorContentForLisa;
+    console.log("Text changed since last prompt:", textChangedSinceLastPrompt);
+
+    if (!textChangedSinceLastPrompt && initialLoadDone) {
+      console.log("Inactivity timer setup (text not changed yet).");
+      typingTimer = setTimeout(async () => {
+          if (currentEditorContent !== previousEditorContentForLisa) { 
+              console.log("Inactivity timer fired, text changed. Sending prompt.");
+              const lisaPrompt = await getLisaPrompt(currentEditorContent, currentAssignmentData.title, currentAssignmentData.rubric, true, false, false, previousEditorContentForLisa, false);
+              typeAIMessage(lisaPrompt, "ai-text");
+              previousEditorContentForLisa = currentEditorContent; 
+          } else {
+              console.log("Inactivity timer fired, but text still hasn't changed. Skipping prompt.");
+          }
+      }, INACTIVITY_THRESHOLD_LONG);
+      return;
+    }
+
+    hasRecentlyCompletedSentence = false; 
+
+    if (sentenceJustEnded) {
+        console.log("Trigger: Sentence End. Setting timer.");
+        hasRecentlyCompletedSentence = true; 
+        typingTimer = setTimeout(async () => {
+            const lisaPrompt = await getLisaPrompt(newText, currentAssignmentData.title, currentAssignmentData.rubric, false, false, true, textBeforeCurrentInput, hasRecentlyCompletedSentence);
+            typeAIMessage(lisaPrompt, "ai-text");
+            previousEditorContentForLisa = newText; 
+            hasRecentlyCompletedSentence = false; 
+        }, SENTENCE_END_PAUSE_THRESHOLD);
+    } else if (newParagraphCount > lastParagraphCount && newText.trim().length > 0) { 
+        lastParagraphCount = newParagraphCount;
+        console.log("Trigger: Paragraph End. New lastParagraphCount:", lastParagraphCount);
+        typingTimer = setTimeout(async () => {
+            const lisaPrompt = await getLisaPrompt(newText, currentAssignmentData.title, currentAssignmentData.rubric, false, true, false, textBeforeCurrentInput, false);
+            typeAIMessage(lisaPrompt, "ai-text");
+            previousEditorContentForLisa = newText; 
+        }, PARAGRAPH_END_PAUSE_THRESHOLD);
+    } else {
+        console.log("Trigger: Default Inactivity. Setting long timer.");
+        typingTimer = setTimeout(async () => {
+            if (currentEditorContent !== previousEditorContentForLisa) { 
+                const lisaPrompt = await getLisaPrompt(currentEditorContent, currentAssignmentData.title, currentAssignmentData.rubric, true, false, false, previousEditorContentForLisa, false);
+                typeAIMessage(lisaPrompt, "ai-text");
+                previousEditorContentForLisa = currentEditorContent; 
+            } else {
+                console.log("Inactivity timer fired, but text still hasn't changed. Skipping prompt.");
+            }
+        }, INACTIVITY_THRESHOLD_LONG);
+    }
+  }
+  
+  function countParagraphs(html) {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    const pTags = tempDiv.querySelectorAll("p").length;
+    if (pTags === 0 && tempDiv.textContent.trim().length > 0) {
+      return 1;
+    }
+    return pTags;
+  }
+  
+  function typeAIMessage(text, elementId) {
+    const targetElement = document.getElementById(elementId);
+    if (targetElement) {
+      const formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+      targetElement.innerHTML = ""; 
+      targetElement.classList.remove('visible'); 
+      
+      const container = targetElement.closest('.shimmer-text');
+      if (container) {
+          container.style.animation = 'none'; 
+          void container.offsetWidth; 
+          container.style.animation = null; 
+      }
+
+      setTimeout(() => {
+        let i = 0;
+        const typingSpeed = 20; 
+        let messageInterval;
+
+        const startTyping = () => {
+          messageInterval = setInterval(() => {
+            if (i < formattedText.length) {
+              if (formattedText.substring(i, i + 8) === '<strong>') {
+                targetElement.innerHTML += '<strong>';
+                i += 8;
+                let strongContent = '';
+                while (i < formattedText.length && formattedText.substring(i, i + 9) !== '</strong>') {
+                  strongContent += formattedText.charAt(i);
+                  i++;
+                }
+                targetElement.innerHTML += strongContent + '</strong>';
+                i += 9;
+              } else {
+                targetElement.innerHTML += formattedText.charAt(i);
+                i++;
+              }
+            } else {
+              clearInterval(messageInterval); 
+              targetElement.classList.add('visible');
+              console.log("LISA typing complete. Added 'visible' class.");
+              if (container) {
+                  container.classList.remove('shimmer-text'); 
+              }
+            }
+          }, typingSpeed);
+        };
+
+        targetElement.classList.remove('visible');
+        if (container) {
+            container.classList.add('shimmer-text'); 
+        }
+        startTyping(); 
+      }, 50); 
+    } else {
+      console.error(`Element with ID '${elementId}' not found for typing effect.`);
+    }
+  }
+  
+  // QR Modal Functions
+  const qrModal = document.getElementById('qr-modal');
+  const qrFallback = document.getElementById('qr-fallback');
+  let qrTimeout;
+  
+  function openQRModal() {
+    if (qrModal) {
+      qrModal.classList.remove('hidden');
+      qrTimeout = setTimeout(() => {
+        if (qrFallback) {
+          qrFallback.classList.remove('hidden');
+        }
+      }, 7000); 
+    }
+    if (profilePopup && profilePopup.classList.contains('active')) {
+        profilePopup.classList.remove('active');
+        profilePopup.classList.add('hidden');
+    }
+    closeAllEditorPopups();
+    closeAllModals();
+  }
+
+  function closeQRModal() {
+    if (qrModal) {
+      qrModal.classList.add('hidden');
+      if (qrFallback) {
+        qrFallback.classList.add('hidden');
+      }
+      clearTimeout(qrTimeout);
+    }
+  }
+  
+  function simulateQRSuccess() {
+    closeQRModal();
+    alert('Class Joined Successfully!'); 
+  }
+  
+  // Basic Editor Controls & Popups
+  function applyFormatting(command, value = null) {
+    document.execCommand(command, false, value);
+    editor.focus();
+    updateToolbarStates();
+  }
+  
+  function updateToolbarStates() {
+    const commands = ['bold', 'italic', 'underline', 'strikeThrough', 'justifyLeft', 'justifyCenter', 'justifyRight'];
+    commands.forEach(command => {
+        const button = document.getElementById(command.toLowerCase() + 'Button');
+        if (button) {
+            if (document.queryCommandState(command)) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+        }
+    });
+  }
+
+  function toggleEditorMenuPopup(popupId, buttonId) {
+    const popup = document.getElementById(popupId);
+    const button = document.getElementById(buttonId);
+
+    if (!popup || !button) return;
+
+    document.querySelectorAll('.editor-menu-popup').forEach(p => {
+        if (p.id !== popupId && p.classList.contains('active')) {
+            p.classList.remove('active');
+            p.classList.add('hidden');
+        }
+    });
+
+    if (profilePopup && profilePopup.classList.contains('active')) {
+      profilePopup.classList.remove('active');
+      profilePopup.classList.add('hidden');
+    }
+
+    if (popup.classList.contains('active')) {
+        popup.classList.remove('active');
+        popup.classList.add('hidden');
+    } else {
+        popup.classList.remove('hidden');
+        setTimeout(() => {
+            popup.classList.add('active');
+        }, 10);
+    }
+  }
+
+  function closeAllEditorPopups() {
+    document.querySelectorAll('.editor-menu-popup').forEach(p => {
+        if (p.classList.contains('active')) {
+            p.classList.remove('active');
+            p.classList.add('hidden');
+        }
+    });
+  }
+
+  function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add('active');
+    }
+    closeAllEditorPopups();
+  }
+
+  function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('active');
+    }
+  }
+
+  function handleLinkInsertion() {
+    const url = linkUrlInput.value.trim();
+    if (url) {
+      applyFormatting('createLink', url);
+    }
+    closeModal('linkModal');
+    linkUrlInput.value = '';
+  }
+
+  async function handleImageInsertion() {
+    const imageUrl = imageUrlInput.value.trim();
+    const imageFile = imageFileInput.files[0];
+
+    if (imageFile) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            applyFormatting('insertImage', e.target.result);
+            closeModal('imageModal');
+            imageUrlInput.value = '';
+            imageFileInput.value = '';
+        };
+        reader.readAsDataURL(imageFile);
+    } else if (imageUrl) {
+        applyFormatting('insertImage', imageUrl);
+        closeModal('imageModal');
+        imageUrlInput.value = '';
+        imageFileInput.value = '';
+    } else {
+        alert("Please enter an image URL or select a file.");
+    }
+  }
+
+  function closeAllModals() {
+    closeModal('linkModal');
+    closeModal('imageModal');
+    linkUrlInput.value = '';
+    imageUrlInput.value = '';
+    imageFileInput.value = '';
+  }
+
+  // Profile Popup Functions
+  function toggleProfilePopup() {
+    if (profilePopup) {
+        profilePopup.classList.toggle('hidden');
+        setTimeout(() => {
+            profilePopup.classList.toggle('active');
+            if (profilePic && profilePicInPopup) {
+                profilePicInPopup.src = profilePic.src;
+            }
+        }, 10);
+    }
+    closeAllEditorPopups();
+    closeAllModals();
+  }
+
+  document.addEventListener('click', (event) => {
+    // Close Profile Popup
+    const profileImg = document.getElementById('profile-pic');
+    if (profilePopup && !profilePopup.contains(event.target) && !profileImg.contains(event.target)) {
+      if (profilePopup.classList.contains('active')) {
+        profilePopup.classList.remove('active');
+        profilePopup.classList.add('hidden');
+      }
+    }
+
+    // Close Editor Menu Popups
+    const editorMenuButtons = [
+        styleButton, fontButton, fontSizeButton, moreMenuButton
+    ];
+    const editorMenuPopups = [
+        styleMenuPopup, fontMenuPopup, fontSizeMenuPopup, moreMenuPopup
+    ];
+
+    editorMenuPopups.forEach((popup, index) => {
+        const button = editorMenuButtons[index];
+        if (popup && button && !popup.contains(event.target) && !button.contains(event.target)) {
+            if (popup.classList.contains('active')) {
+                popup.classList.remove('active');
+                popup.classList.add('hidden');
+            }
+        }
+    });
+
+    // Close Modals when clicking outside content area
+    [linkModal, imageModal].forEach(modal => {
+        if (modal && modal.classList.contains('active') && !modal.querySelector('.editor-modal-content').contains(event.target)) {
+            closeModal(modal.id);
+        }
+    });
+  });
+
+  // Handle Profile Picture Upload
+  function handleProfilePicUpload() {
+      if (profilePicInput.files && profilePicInput.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+              if (profilePic) profilePic.src = e.target.result;
+              if (profilePicInPopup) profilePicInPopup.src = e.target.result;
+          };
+          reader.readAsDataURL(profilePicInput.files[0]);
+      }
+  }
+
+  // Background Theme Functions
+  const gradientPresets = {
+    'default-blue': 'linear-gradient(to bottom right, #eff6ff, #dbeafe)',
+    'soft-pinks': 'linear-gradient(to bottom right, #fce7f3, #fff7ed)',
+    'sunrise-hues-1': 'linear-gradient(to bottom right, #fefce8, #fff7ed)',
+    'coastal-vibes-1': 'linear-gradient(to bottom right, #ccfbf1, #dbeafe)',
+    'garden-fresh-1': 'linear-gradient(to bottom right, #f0fdf4, #f7fee7)',
+    'lavender-fields-1': 'linear-gradient(to bottom right, #faf5ff, #fce7f3)',
+    'energetic-blue': 'linear-gradient(to bottom right, #ffffff, #ffffff, #bfdbfe)',
+    'energetic-pink': 'linear-gradient(to bottom right, #ffffff, #ffffff, #fbcfe8)',
+    'single-red-stripe': 'linear-gradient(to bottom right, white 40%, rgb(239, 68, 68) 40%, rgb(239, 68, 68) 60%, white 60%)',
+    'dual-blue-stripes': 'linear-gradient(to bottom right, white 30%, rgb(59, 130, 246) 30%, rgb(59, 130, 246) 40%, white 40%, white 60%, rgb(59, 130, 246) 60%, rgb(59, 130, 246) 70%, white 70%)',
+    'abstract-blurs': 'radial-gradient(circle at 20% 30%, rgba(255, 255, 153, 0.1) 0%, transparent 40%), radial-gradient(circle at 70% 60%, rgba(255, 192, 203, 0.1) 0%, transparent 40%), radial-gradient(circle at 50% 10%, rgba(173, 216, 230, 0.1) 0%, transparent 40%)'
+  };
+
+  function applyBackgroundGradient(themeKey) {
+    document.body.style.backgroundImage = gradientPresets[themeKey];
+  }
+
+  // Initialize the app
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log("--- CONSOLIDATED DOMContentLoaded fired! ---");
+
+    dashboard = document.getElementById('dashboard');
+    classDetails = document.getElementById('class-details');
+    workspace = document.getElementById('workspace');
+    assistant = document.getElementById('ai-assistant');
+    aiText = document.getElementById('ai-text');
+    editor = document.getElementById('editor');
+    assignmentTitleDisplay = document.getElementById('assignmentTitleDisplay');
+    rubricContentDisplay = document.getElementById('rubricContent');
+    rubricContentWrapper = document.getElementById('rubricContentWrapper');
+    toggleRubricBtn = document.getElementById('toggleRubricBtn');
+    finalFeedbackButton = document.getElementById('finalFeedbackButton');
+    profilePopup = document.getElementById('profile-popup');
+    profilePic = document.getElementById('profile-pic');
+    profilePicInPopup = document.getElementById('profile-pic-in-popup');
+    profilePicInput = document.getElementById('profilePicInput');
+    
+    // Assign editor elements
+    styleButton = document.getElementById('styleButton');
+    styleMenuPopup = document.getElementById('styleMenuPopup');
+    fontButton = document.getElementById('fontButton');
+    fontMenuPopup = document.getElementById('fontMenuPopup');
+    fontSizeButton = document.getElementById('fontSizeButton');
+    fontSizeMenuPopup = document.getElementById('fontSizeMenuPopup');
+    moreMenuButton = document.getElementById('moreMenuButton');
+    moreMenuPopup = document.getElementById('moreMenuPopup');
+    linkButton = document.getElementById('linkButton');
+    imageButton = document.getElementById('imageButton');
+
+    // Assign toolbar buttons
+    boldButton = document.getElementById('boldButton');
+    italicButton = document.getElementById('italicButton');
+    underlineButton = document.getElementById('underlineButton');
+    strikeButton = document.getElementById('strikeButton');
+    centerButton = document.getElementById('centerButton');
+    leftButton = document.getElementById('leftButton');
+    rightButton = document.getElementById('rightButton');
+
+    // Assign modal elements
+    linkModal = document.getElementById('linkModal');
+    linkUrlInput = document.getElementById('linkUrlInput');
+    insertLinkButton = document.getElementById('insertLinkButton');
+    cancelLinkButton = document.getElementById('cancelLinkButton');
+    imageModal = document.getElementById('imageModal');
+    imageUrlInput = document.getElementById('imageUrlInput');
+    imageFileInput = document.getElementById('imageFileInput');
+    insertImageButton = document.getElementById('insertImageButton');
+    cancelImageButton = document.getElementById('cancelImageButton');
+
+    // Initialize UI
+    renderDashboard();
+    
+    if (editor) {
+      if (!editor.innerHTML.trim() || editor.innerHTML.trim() === "<p></p>") {
+        editor.innerHTML = "<p>Start writing here...</p>"; 
+      }
+      currentEditorContent = editor.textContent || '';
+      editor.addEventListener('input', handleEditorInput);
+      editor.addEventListener('keyup', updateToolbarStates);
+      editor.addEventListener('mouseup', updateToolbarStates);
+      editor.addEventListener('focus', updateToolbarStates);
+      console.log("Editor input listener ATTACHED to #editor successfully.");
+    } else {
+      console.error("CRITICAL ERROR: 'editor' element not found after DOMContentLoaded. Check HTML ID.");
+    }
+
+    if (toggleRubricBtn && rubricContentWrapper) {
+        toggleRubricBtn.addEventListener('click', () => {
+            rubricContentWrapper.classList.toggle('expanded');
+            document.getElementById('rubricToggleIcon').classList.toggle('expanded');
+        });
+    }
+
+    // Editor control event listeners
+    if (styleButton) styleButton.addEventListener('click', () => toggleEditorMenuPopup('styleMenuPopup', 'styleButton'));
+    if (styleMenuPopup) {
+        styleMenuPopup.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const format = e.target.dataset.format;
+                const value = e.target.dataset.value;
+                if (format && value) {
+                    applyFormatting(format, value);
+                    styleButton.textContent = e.target.textContent;
+                }
+                toggleEditorMenuPopup('styleMenuPopup', 'styleButton');
+            });
+        });
+    }
+
+    // Toolbar buttons
+    [boldButton, italicButton, underlineButton, strikeButton, leftButton, centerButton, rightButton].forEach(button => {
+        if(button) {
+            button.addEventListener('click', () => {
+                applyFormatting(button.dataset.command);
+            });
+        }
+    });
+
+    if (fontButton) fontButton.addEventListener('click', () => toggleEditorMenuPopup('fontMenuPopup', 'fontButton'));
+    if (fontMenuPopup) {
+        fontMenuPopup.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const font = e.target.dataset.font;
+                if (font) {
+                    applyFormatting('fontName', font);
+                    fontButton.textContent = font;
+                }
+                toggleEditorMenuPopup('fontMenuPopup', 'fontButton');
+            });
+        });
+    }
+
+    if (fontSizeButton) fontSizeButton.addEventListener('click', () => toggleEditorMenuPopup('fontSizeMenuPopup', 'fontSizeButton'));
+    if (fontSizeMenuPopup) {
+        fontSizeMenuPopup.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const size = e.target.dataset.size;
+                const text = e.target.textContent;
+                if (size) {
+                    applyFormatting('fontSize', size);
+                    fontSizeButton.textContent = text;
+                }
+                toggleEditorMenuPopup('fontSizeMenuPopup', 'fontSizeButton');
+            });
+        });
+    }
+
+    if (moreMenuButton) moreMenuButton.addEventListener('click', () => toggleEditorMenuPopup('moreMenuPopup', 'moreMenuButton'));
+    
+    // Color inputs
+    const textColor = document.getElementById('textColor');
+    const highlightColor = document.getElementById('highlightColor');
+    if (textColor) textColor.addEventListener('input', (e) => applyFormatting('foreColor', e.target.value));
+    if (highlightColor) highlightColor.addEventListener('input', (e) => {
+        document.execCommand('backColor', false, e.target.value);
+        editor.focus();
+    });
+
+    // Link/Image button handlers
+    if (linkButton) linkButton.addEventListener('click', () => openModal('linkModal'));
+    if (insertLinkButton) insertLinkButton.addEventListener('click', handleLinkInsertion);
+    if (cancelLinkButton) cancelLinkButton.addEventListener('click', () => closeModal('linkModal'));
+
+    if (imageButton) imageButton.addEventListener('click', () => openModal('imageModal'));
+    if (insertImageButton) insertImageButton.addEventListener('click', handleImageInsertion);
+    if (cancelImageButton) cancelImageButton.addEventListener('click', () => closeModal('imageModal'));
+
+    // Final Feedback button
+    if (finalFeedbackButton) {
+        finalFeedbackButton.addEventListener('click', async () => {
+            console.log("Final Feedback button clicked.");
+            const userText = editor.textContent || ''; 
+            
+            const finalFeedback = await getLisaPrompt(
+                userText, 
+                currentAssignmentData.title, 
+                currentAssignmentData.rubric, 
+                false, false, false, 
+                previousEditorContentForLisa, 
+                false, 
+                true   
+            );
+            typeAIMessage(finalFeedback, "ai-text"); 
+        });
+    } else {
+        console.error("Final Feedback Button not found!");
+    }
+
+    if (profilePicInput) {
+        profilePicInput.addEventListener('change', handleProfilePicUpload);
+    }
+
+    // Set default background
+    applyBackgroundGradient('default-blue');
+
+    // Add event listeners for background theme radio buttons
+    document.querySelectorAll('input[name="background-theme"]').forEach(radio => {
+      radio.addEventListener('change', (event) => {
+        applyBackgroundGradient(event.target.value);
+      });
+    });
+  });
+
+</script>
+</body>
+</html>

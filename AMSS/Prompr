@@ -1,0 +1,496 @@
+You are an AI grading assistant for Acadex Mini. Your task is to finalize the grading and validation of a student’s paper using the following inputs:
+
+    1.  Assignment Name
+    Analyzing Organizational Effectiveness
+    2.  Assignment Description
+    The purpose of this assignment is to analyze organizational effectiveness by evaluating how well an organization achieves its goals while utilizing resources efficiently. This includes applying relevant models such as the Goal Attainment Approach, Systems Theory, and the Strategic Constituency Approach to assess performance. You will examine key criteria like efficiency, adaptability, employee and customer satisfaction, and innovation to determine the organization’s strengths and weaknesses. Additionally, you will identify internal and external factors that influence organizational effectiveness and provide actionable recommendations for improvement. The assignment should conclude with a concise summary of findings and the importance of continuous monitoring for long-term success.
+    3.  Rubric (broad grading criteria)
+    Grade each of the content 6 sections that are numbered and named here in parentheses and separated by semicolons (1. Description of Organization; 2. Chosen Organization as an Open System; 3. Application of Management Theories to Stakeholders; 4. Decision-Making Model; 5. The Use of Artificial Intelligence (AI); 6. Four Functions to Implement Long-Term and Short-Term Goals) on a scale of 1-5, with the point values for 1, 2, 3, 4, or 5 provided below in parentheses for each section, and explain why you chose 1, 2, 3, 4, or 5.
+
+
+
+For Section 1: Description of Organization
+
+Grade as 1 (0 points) if the description of involvement/awareness of chosen organization during the time it experienced a problem/issue, including a summary of the issue/problem, is absent, inappropriate, or irrelevant.
+
+Grade as 2 (6.18 points) if the description of involvement/awareness of chosen organization during the time it experienced a problem/issue, including a summary of the issue/problem, is vague and incomplete or incorrect.
+
+Grade as 3 (7.13 points) if the description of involvement/awareness of chosen organization during the time it experienced a problem/issue, including a summary of the issue/problem, is present but provided at a cursory level and lacks relevant supporting details.
+
+Grade as 4 (8.08 points) if the description of involvement/awareness of chosen organization during the time it experienced a problem/issue, including a summary of the issue/problem, is clear and well-integrated and provides an above-average quality of supporting details.
+
+Grade as 5 (9.5 points) if the description of involvement/awareness of chosen organization during the time it experienced a problem/issue, including a summary of the issue/problem, is thorough and includes substantial relevant supporting details.
+
+
+
+For Section 2: Chosen Organization as an Open System
+
+Grade as 1 (0 points) if an application of the four components of an open system in evaluating the effectiveness of the chosen organization as an open system during the time it experienced the issue/problem (including an explanation) is absent, inappropriate, or irrelevant.
+
+Grade as 2 (6.18 points) if an application of the four components of an open system in evaluating the effectiveness of the chosen organization as an open system during the time it experienced the issue/problem (including an explanation) is vague and incomplete or incorrect.
+
+Grade as 3 (7.13 points) if an application of the four components of an open system in evaluating the effectiveness of the chosen organization as an open system during the time it experienced the issue/problem (including an explanation) is present but provided at a cursory level and lacks relevant supporting details.
+
+Grade as 4 (8.08 points) if an application of the four components of an open system in evaluating the effectiveness of the chosen organization as an open system during the time it experienced the issue/problem (including an explanation) is clear and well-integrated and provides an above-average quality of supporting details.
+
+Grade as 5 (9.5 points) if an application of the four components of an open system in evaluating the effectiveness of the chosen organization as an open system during the time it experienced the issue/problem (including an explanation) is thorough and includes substantial relevant supporting details.
+
+
+
+For Section 3: Application of Management Theories to Stakeholders
+
+Grade as 1 (0 points) if the explanation of how the organization could have handled the problem/issue effectively with three specific stakeholders according to organizational theories as specified in the assignment (one theory from each of the three approaches) is absent, inappropriate, or irrelevant.
+
+Grade as 2 (9.26 points) if the explanation of how the organization could have handled the problem/issue effectively with three specific stakeholders according to organizational theories as specified in the assignment (one theory from each of the three approaches) is vague and incomplete or incorrect.
+
+Grade as 3 (10.69 points) if the explanation of how the organization could have handled the problem/issue effectively with three specific stakeholders according to organizational theories as specified in the assignment (one theory from each of the three approaches) is present but provided at a cursory level and lacks relevant supporting details.
+
+Grade as 4 (12.11 points) if the explanation of how the organization could have handled the problem/issue effectively with three specific stakeholders according to organizational theories as specified in the assignment (one theory from each of the three approaches) is clear and well-integrated and provides an above-average quality of supporting details.
+
+Grade as 5 (14.25 points) if the explanation of how the organization could have handled the problem/issue effectively with three specific stakeholders according to organizational theories as specified in the assignment (one theory from each of the three approaches) is thorough and includes substantial relevant supporting details.
+
+
+
+For Section 4: Decision-Making Model
+
+Grade as 1 (0 points) if the definition of both decision-making models, as well as an explanation and integration of the selected model and an evaluation of its shortcomings, is absent, inappropriate, or irrelevant.
+
+Grade as 2 (6.18 points) if the definition of both decision-making models, as well as an explanation and integration of the selected model and an evaluation of its shortcomings, is vague and incomplete or incorrect.
+
+Grade as 3 (7.13 points) if the definition of both decision-making models, as well as an explanation and integration of the selected model and an evaluation of its shortcomings, is present but provided at a cursory level and lacks relevant supporting details.
+
+Grade as 4 (8.08 points) if the definition of both decision-making models, as well as an explanation and integration of the selected model and an evaluation of its shortcomings, is clear and well-integrated and provides an above-average quality of supporting details.
+
+Grade as 5 (9.5 points) if the definition of both decision-making models, as well as an explanation and integration of the selected model and an evaluation of its shortcomings, is thorough and includes substantial relevant supporting details.
+
+
+
+For Section 5: The Use of Artificial Intelligence (AI)
+
+Grade as 1 (0 points) if the identification and use of an AI tool to formulate a suggested solution to the problem, as well as a discussion of the steps taken to generate the suggested solution with the prompt used, are absent, inappropriate, or irrelevant.
+
+Grade as 2 (6.18 points) if the identification and use of an AI tool to formulate a suggested solution to the problem, as well as a discussion of the steps taken to generate the suggested solution with the prompt used, are vague and incomplete or incorrect.
+
+Grade as 3 (7.13 points) if the identification and use of an AI tool to formulate a suggested solution to the problem, as well as a discussion of the steps taken to generate the suggested solution with the prompt used, are present but provided at a cursory level and lack relevant supporting details.
+
+Grade as 4 (8.08 points) if the identification and use of an AI tool to formulate a suggested solution to the problem, as well as a discussion of the steps taken to generate the suggested solution with the prompt used, are clear and well-integrated and provide an above-average quality of supporting details.
+
+Grade as 5 (9.5 points) if the identification and use of an AI tool to formulate a suggested solution to the problem, as well as a discussion of the steps taken to generate the suggested solution with the prompt used, are thorough and include substantial relevant supporting details.
+
+
+
+For Section 6: Four Functions to Implement Long-Term and Short-Term Goals
+
+Grade as 1 (0 points) if the suggestions and justifications of one long-term goal and one short-term goal based on the four functions of management to meet the AI recommendation above are absent, inappropriate, or irrelevant.
+
+Grade as 2 (9.26 points) if the suggestions and justifications of one long-term goal and one short-term goal based on the four functions of management to meet the AI recommendation above are vague and incomplete or incorrect.
+
+Grade as 3 (10.69 points) if the suggestions and justifications of one long-term goal and one short-term goal based on the four functions of management to meet the AI recommendation above are present but provided at a cursory level and lack relevant supporting details.
+
+Grade as 4 (12.11 points) if the suggestions and justifications of one long-term goal and one short-term goal based on the four functions of management to meet the AI recommendation above are clear and well-integrated and provide an above average quality of supporting details.
+
+Grade as 5 (14.25 points) if the suggestions and justifications of one long-term goal and one short-term goal based on the four functions of management to meet the AI recommendation above are thorough and include substantial relevant supporting details.
+
+
+
+Then, grade each of the 5 quality/mechanic criterion that are numbered and named here in parentheses and separated by semicolons (7. Thesis, Position, or Purpose; 8. Development, Structure, and Conclusion; 9. Quality of Evidence; 10. Mechanics of Writing; 11. Format/Documentation) on a scale of 1-5, with the point values for 1, 2, 3, 4, or 5 provided below in parentheses for each section, and explain why you chose 1, 2, 3, 4, or 5.
+
+
+
+For Criterion 7: Thesis, Position, or Purpose
+
+Grade as 1 (0 points) if the thesis, position, or purpose is not discernible. No awareness of the appropriate audience is evident.
+
+Grade as 2 (4.32 points) if the thesis, position, or purpose is unfocused or confused. There is very little awareness of the intended audience.
+
+Grade as 3 (4.99 points) if the thesis, position, or purpose is discernable in most aspects but is occasionally weak or unclear. There is limited awareness of the appropriate audience.
+
+Grade as 4 (5.65 points) if the thesis, position, or purpose is adequately presented. An awareness of the appropriate audience is demonstrated.
+
+Grade as 5 (6.65 points) the thesis, position, or purpose is clearly communicated throughout and clearly directed to a specific audience.
+
+
+
+For Criterion 8: Development, Structure, and Conclusion
+
+Grade as 1 (0 points) if there is no advancement of the thesis, position, or purpose is evident. Connections between paragraphs are missing or inappropriate. No conclusion is offered.
+
+Grade as 2 (4.32 points) if the writing lacks logical progression of the thesis, position, or purpose. Some organization is attempted, but ideas are disconnected. Conclusion is unclear and not supported by the overall development of the purpose.
+
+Grade as 3 (4.99 points) if there is limited advancement of thesis, position, or purpose is discernable. There are inconsistencies in organization or the relationship of ideas. Conclusion is simplistic and not fully aligned to the development of the purpose.
+
+Grade as 4 (5.65 points) if the thesis, position, or purpose is advanced in most aspects. Ideas clearly build on each other. Conclusion aligns to the development of the purpose.
+
+Grade as 5 (6.65 points) the thesis, position, or purpose is logically advanced throughout. The progression of ideas is coherent and unified. A clear and logical conclusion aligns to the development of the purpose.
+
+
+
+For Criterion 9: Quality of Evidence
+
+Grade as 1 (0 points) if the evidence to support the thesis, position, or purpose is absent. The writing relies entirely on the perspective of the writer.
+
+Grade as 2 (3.71 points) if the evidence is limited or irrelevant. The interpretation of other perspectives is superficial or incorrect. Sources do not meet the minimum mix and number required in the assignment.
+
+Grade as 3 (4.28 points) if the evidence is used but is insufficient or of limited relevance. Simplistic explanation or integration of other perspectives is present. Sources might also not meet the minimum mix and number required in the assignment.
+
+Grade as 4 (4.85 points) if there is relevant evidence that includes other perspectives is used. Sources meet the minimum mix and number required in the assignment.
+
+Grade as 5 (5.7 points) if there is specific and appropriate evidence is included. Relevant perspectives of others are clearly considered. Sources meet the minimum mix and number required in the assignment.
+
+
+
+For Criterion 10: Mechanics of Writing
+
+Grade as 1 (0 points) if errors in grammar or syntax are pervasive and impede meaning. Incorrect language choice or sentence structure errors are found throughout.
+
+Grade as 2 (3.71 points) if frequent and repetitive mechanical errors are present. Inconsistencies in language choice or sentence structure are recurrent.
+
+Grade as 3 (4.28 points) if occasional mechanical errors are present. Language choice is generally appropriate. Varied sentence structure is attempted. Writing style, format, and grammar are free of significant errors.
+
+Grade as 4 (4.85 points) if few mechanical errors are present. Suitable language choice and sentence structure are used. Writing style, format, and grammar are free of errors.
+
+Grade as 5 (5.7 points) if no mechanical errors are present. Appropriate language choice and sentence structure are used throughout. Writing style, format, and grammar are free of errors and professionally executed.
+
+
+
+For Criterion 11: Format/Documentation
+
+Grade as 1 (0 points) if appropriate APA format is not used and/or no documentation of sources is provided.
+
+Grade as 2 (2.47 points) if appropriate APA format is attempted, but some elements are missing and/or frequent errors in documentation of sources are evident.
+
+Grade as 3 (2.85 points) if appropriate APA format and documentation are used, although with some obvious errors.
+
+Grade as 4 (3.23 points) if appropriate APA format and documentation are used with only minor errors.
+
+Grade as 5 (3.8 points) if no errors in APA formatting or documentation are present.
+    4.  “Look Out For” (precise aspects or deeper analysis as specified by the teacher)
+    Wordcounts above 1980 words or below 1440 words (wordcounts not including title and reference pages or section headings);
+
+
+
+Section 2 lacking the terminology input, process, output, feedback, or external environment;
+
+
+
+Section 3 lacking the terminology classical, behavioral, quantitative, systems, contingency, or contemporary (only three of these terms are required);
+
+
+
+in Section 3, if behavioral is discussed, early, human relations, or behavioral science must be mentioned;
+
+
+
+in Section 3, if quantitative is discussed, operations or evidence-based must be mentioned;
+
+
+
+in Section 3, if systems is discussed, closed, open, or complexity must be mentioned;
+
+
+
+in Section 3, if contemporary is discussed, learning, high-performance, or shared value, or sustainable development must be mentioned;
+
+
+
+in Section 3, three specific stakeholders from either employees, owners, board, customers, competitors, competition, suppliers, vendors, distributors, strategic allies, unions, associations, community, communities, government, regulators, interest groups, economic, economy, technology, technological, sociocultural, demographic, political, legal, laws, international, must be mentioned;
+
+
+
+in section 4, both rational and nonrational must be defined and the steps of identify, alternative, evaluate, select, and implement must plus shortcomings must be mentioned;
+
+
+
+in section 4, if nonrational is discussed, either bounded rationality, hubris, satisficing or intuition must be mentioned;
+
+
+
+in section 6, plan, organize, lead, control, long-term, short-term, and AI must all be mentioned;
+
+
+
+contractions may not be used;
+
+
+
+first person may be used
+
+  and also look out for   grammar
+    5.  The student’s paper
+    Analyzing the Effectiveness of Highstrike
+Karla Hernandez
+Colangelo College of Business, Grand Canyon University
+MGT-420: Organizational Behavior and Management
+Craig St John
+February 11, 202
+Analyzing The Effectiveness of Highstrike
+Highstrike is an educational trading company established in 2018 by Benjamin Zogby. In
+2018, Benjamin was managing and operating the company by himself. He was operating as
+fulfillment, sales, customer support, and CEO. Since 2018, Benjamin has dedicated his life to
+optimizing the company's growth. According to Kiniki (2012), synergy is the idea that two or
+more forces combined create an effect that is greater than the sum of their individual effects.”
+Highstrike has about ten employees acquired through the success of the trading program.
+Although the company size remains small, it has increased its brand awareness. The main issue
+that Highstrike has encountered was prematurely promoting a marketing manager without proper
+training and support to the chief executive officer, which has affected business operations.
+Open Systems
+The four components of a system are inputs, transformational processes, outputs, and
+feedback. The inputs going into the company are the educational content, qualified employees,
+learning resources, and technology equipment. Highstrike invests learning resources, such as
+books, conferences, and software, in their qualified employees because they recognize their
+employee's value. Highstrike inputs money into Discord, a communicating platform, brokerage
+accounts, and Thinkorswim software. The second component of the open system is a
+transformational process that includes instructional delivery, interactive learning, assessment and
+evaluation, and adaptation to a variety of customers. The content is distributed to a customer
+once they’ve paid for the trading course. The customer has lifetime access to the course content
+through the website. Within the course, the student receives lectures, discussion boards, and
+practical assessments to prepare customers for stock trading. The third component of an open
+system is output. Highstrike’s output is demonstrated through its skilled customers, certificates
+for customers, and employee retention. One of the biggest forms of output for Highstrike is its
+customer success stories. Customers usually have little to no trading experience, therefore
+Highstrike aims to create content that is easy to consume for customers. If customers fail to
+understand the material then Highstrike doesn’t obtain their desired output. Additionally,
+Highstrike’s excellent employee retention is a desired output because they heavily invest their
+resources in employees. The final component is the feedback section. Highstrike warmly accepts
+customer and employee feedback. Additionally, positive feedback is demonstrated through an
+increase in return on investments. Since Highstrike is a trading company it is essential to monitor
+industry changes. Highstrike’s adaptability describes an open system which tends to be an
+indicator of success.
+Management Viewpoints and Approaches
+Behavioral Viewpoint- Human relations
+In regards to the issue of prematurely promoting an employee, customers have
+unknowingly been affected. The current unqualified CEO is not properly overseeing employees
+and is not providing feedback. Without proper feedback, employees underperform the quality of
+the educational trading content for the customers. According to Smith (1983), “The job of
+management then would become one of providing the directions and means to allow both
+customers and employees to experience the highest level of hierarchy.” The highest level of
+hierarchy is self-actualization, which provides security for the employee's customer service
+skills. The human relations movement can be applied to solve the issue by instructing and
+offering training to the unqualified CEO. Employees at Highstrike view their CEO as a Theory X
+employee because of their operating decisions. A theory X employee has tendencies to be
+irresponsible, lack ambition and need constant supervision. Customers might not notice the
+change in management as early as employees, but if the CEO does not receive support in training
+it will affect customers directly. If the CEO does not receive proper training, it will lead to an
+increase in poor employee engagement, inconsistent service quality, and negative public image.
+Therefore, it is imperative for Highstrike to offer additional training to the unqualified employee
+or to hire a qualified employee who has theory Y tendencies and aims for self-actualization in
+employees and customers.
+Contemporary approaches Viewpoint- learning organization
+In regards to the issue of prematurely promoting a marketing manager to CEO, other
+employees are being negatively affected. Highstrike is a company that values its employees'
+learning process, but management has overlooked their employees concerning the current CEO.
+Although no one has verbally spoken up about the current CEO lacking the necessary skills to
+lead and direct, the company is starting to financially suffer. Some employees might be scared to
+communicate with board members, others might not want to embarrass the CEO, and others
+might feel their feedback is not valued. Highstrike can utilize the learning organization's
+contemporary viewpoint to enhance employee lack of vision, limited ability to excel, and
+resentment buildup. Highstrike should promote a culture of continuous learning, including but
+not limited to the CEO. By constantly promoting growth, employees will receive a sense of
+self-actualization, and the business will have greater employee assets. Additionally, Highstrike
+can promote a culture of communication and transparency regarding higher management.
+Employees should be able to anonymously reach out to higher management without feeling fear
+of reprisal. Employees should not feel incorrect about offering feedback to the CEO because
+everyone makes mistakes, and everyone needs to receive feedback. Overall, Highstrike needs to
+embrace a culture of learning and employee development to aid business success.
+Quantitative Viewpoint- operations management
+In regards to the issue of prematurely promoting an employee, board members are
+directly affected by the profitability and business operations. As mentioned above, Highstrike is
+a trading company that is inclined to fluctuate due to external factors. Highstrike’s operation
+performance has decreased in members enticed to subscribe and fellows enrolled. The number of
+sales call bookings has decreased from 6-8 a day to 2-3 a day. Additionally, the company has
+experienced a net break-even profit to loss, which has not happened before. Highstrike can
+utilize operations management to solve the issue by offering training to the unqualified CEO or
+replacing the current CEO. The board members at Highstrike can begin identifying the key
+performance indicators that impact profitability. As mentioned above, KPIs include student
+enrollment, and customer and employee satisfaction. The second step includes using data
+analytics to compare and contrast the CEO’s operational decisions with the operational metrics.
+For example, the business could have experienced a brief loss due to seasonal and market
+changes, but it relies on the CEO to improve business strategies to optimize growth. The next
+step includes conducting a cost-benefit analysis to determine if the CEO’s expenses are
+correlated with profitability. The last step serves as a reflection of the prior steps. Highstrike
+board members can retain their current CEO, but implement operational management tools to
+determine if the employee is fit for the role. If after using the operational management tools, data
+reveals the CEO is not fit for the role they must decide to provide additional training or replace
+the CEO to improve profitability.
+Evaluation of the Decision-Making Process
+After analyzing the different management viewpoints and approaches Highstrike has, we
+can effectively evaluate their decision-making process and nonrational. A non-rational
+decision-making model suggests that Highstrike operates without having complete information
+about a situation and is influenced by emotions, biases, and heuristics. The company was bought
+from the founder, and the buyer demanded a new CEO promptly. This hindrance is a form of
+time, money, and value constraints. The company wasn’t extremely profitable when it was
+bought, therefore, they needed to promote someone within the company. Additionally, The
+current CEO serves as a good mediator and has extensive experience in therapy, but from a
+technical business standpoint, they lack the essential skills for the role. The satisficing model and
+bounded rationality model fit this issue best. Unfortunately, Highstrike felt rushed by investors
+and board members to appoint a new CEO with minimal information, time, and money. As a
+result of making a non-rational decision, the company is now declining in profitability and brand
+presence.
+Artificial Intelligence
+Highstrike is a trading company that embraces constant change and technological
+innovations. Artificial intelligence is starting to become prevalent in the trading industry, but for
+the issue presented, predictive analytics with AI would have avoided the issue. Bhattacharya
+(2023), stated, “The study focuses on recognizing the prime attributes that help decide which
+employees may be promoted and LIME and SHAP contribute to achieving this.” For context,
+LIME and SHAP are two software within the XAI technologies. Predictive analytics with AI for
+employee promotion is a prevalent field that has demonstrated accuracy. Highstrike would first
+need to implement an evidence-based management approach and pair those results with AI
+predictive analytics. If Highstrike was to utilize this form of AI then it would remove any biases
+when evaluating the current CEO. One of the issues with using predictive analytics with AI
+might be its lack of knowledge of an employee's intangible assets. For example, the current CEO
+is an honest, hardworking, with extensive knowledge in therapy. Highstrike offers their
+employees and customers access to therapy sessions with the CEO. Since AI would not be able
+to account for those soft skills it could also make a harmful decision. This AI tool could be used
+for all four levels of management. Highstrike has about ten employees who could also be
+evaluated using the tool to ensure the company is optimizing its resources. The board members
+are the top level and the CEO serves as the middle manager. The first-line managers include the
+sales manager and fulfillment manager. The team leaders are those directly having one call for
+sales. Highstrike is hiring more team leaders and the predictive analytics tool using AI could
+make the hiring process faster and cheaper. Overall, Highstrike could implement predictive
+analytics with AI with caution, as do many other companies, regarding the hiring and employee
+retention process.
+Goals
+As mentioned above, Highstrike is a good company that has recently prematurely promoted an
+employee to CEO based on a non-rational decision-making process. For Highstrike to regain
+profitability they need to implement long and short-term SMART goals. A short-term goal would
+be to provide the unqualified CEO with training and mentorship or replace them with a qualified
+CEO. Both options fall under the SMART goals because they are specific, measurable,
+attainable, result-oriented, and target-dated. Both options require Highstrike to invest money.
+Highstrike values employee history, therefore, they would opt to keep the current CEO. If they
+keep the current CEO, Highstrike needs to provide mentorship and training for three months.
+After the six months, they could give them a two-month trial and monitor business outputs. The
+other option includes demoting the current CEO to a marketing manager and hiring a qualified
+CEO outside of the company. The hiring process could last about three months with additional
+training and mentorship to immerse the new CEO of Highstrike's culture and policies. A
+long-term goal would be to implement a better leadership and operational system to avoid having
+conflicts with CEOs. As I was writing this paper, I noticed operational flaws that are harming the
+business. Highstrike needs to hire people outside of their success stories. If they restructure the
+company and only keep employees who have theory Y tendencies they could increase their
+opportunities. The long-term goal would take about two years for a seamless transition. The
+long-term goal could be measured by profitability, employee and customer satisfaction, and
+brand awareness.
+Conclusion
+Functions of Management
+As a result of prematurely hiring an unqualified employee to CEO, the company has begun to
+face hardships and will continue unless Highstrike implements predictive analytics AI along with
+the short and long-term goals. Highstrike needs to establish clear expectations, develop a training
+plan assign mentors, and monitor progress for the current CEO. If Highstrike chooses to replace
+the current CEO they need to begin recruitment, develop a transition plan, and monitor the
+progress of the future CEO. Overall Highstrike needs to execute a culture where feedback and
+improvement are encouraged to obtain a better organized company.
+References
+A. Bhattacharya, P. Choudhary, S. Mukhopadhyay, B. Misra, S. Chakraborty and N. Dey,
+"Explainable AI for Predictive Analytics on Employee Promotion," 2023 International
+Conference on Advanced Computing Technologies and Applications (ICACTA), Mumbai, India,
+2023, pp. 1-7
+Kinicki, A., & Breaux Soignet, D. (2021). Organizational behavior and management with
+Connect. McGraw Hill. ISBN-13: 9781307948899
+(n.d.). Wikipedia. Retrieved February 12, 2024, from
+https://ieeexplore-ieee-org.lopes.idm.oclc.org/document/10393141
+Meet Our Team. (n.d.). HighStrike. Retrieved February 12, 2024, from
+https://highstrike.com/about/
+Smith, W. C. (1983). Total support: Unifying customer needs with worker satisfaction.
+Management Review, 72(8), 49.
+6.  Llama’s pre-analysis, which includes a preliminary grade and key observations.
+Based on the analysis provided, I will evaluate the paper according to the 
+specified rubric.
+
+**Rubric Alignment (Primary Focus)**
+
+The paper provides a clear structure and adheres to the specified format, 
+meeting most of the requirements outlined in the rubric. However, there 
+are some areas where depth and supporting evidence could be improved. 
+Specifically:
+
+* The analysis of the company's situation is somewhat superficial, lacking 
+specific data points and examples to support the claims made.
+* The discussion of decision-making processes, predictive analytics, and 
+AI is limited, with few concrete explanations or applications provided.
+* The paper does not adequately address potential counterarguments or 
+limitations of the proposed solutions.
+
+Given these gaps in depth, I would deduct 10-15 points from the 
+preliminary grade to reflect the suboptimal alignment with the rubric.
+
+**Preliminary Grade**: 80/95
+
+**Look Out For Section**
+
+Upon reviewing the "Look Out For" section, I notice that the paper 
+mentions a few areas where it could be improved:
+
+* The importance of providing concrete examples and data points to support 
+claims.
+* The need for more in-depth analysis of decision-making processes and AI 
+applications.
+* The potential risks or limitations of implementing certain solutions.
+
+While these suggestions are helpful, they do not significantly impact the 
+overall grade, as the paper still lacks depth in these areas.
+
+**In-Depth Complexity Analysis**
+
+The paper touches on complex concepts such as predictive analytics, AI, 
+and organizational behavior, but it does so superficially. The analysis of 
+decision-making models is particularly lacking, with few concrete 
+explanations or applications provided. This suggests that the preliminary 
+grade should be adjusted downward to reflect this lack of depth.
+
+**Summary of Key Insights**
+
+The paper highlights several key strengths:
+
+* Clear structure and adherence to the specified format
+* Effective use of examples and illustrations
+
+However, it also reveals several weaknesses:
+
+* Superficial analysis of company situation and decision-making processes
+* Limited discussion of predictive analytics and AI applications
+* Gaps in supporting evidence and concrete data points
+
+Based on these strengths and weaknesses, I would adjust the preliminary 
+grade downward to reflect the suboptimal depth and coherence of the paper.
+
+**Final Grade**: 75/95
+
+7.  The teacher’s personalized tone for grading, which reflects how the teacher would typically respond to good, bad, and average papers.
+Bad = This sucks, try it agains
+Good = Awesome paper! Lets aim for more datails regarding the issue, and lets explain a bit more, other than that it is awesome!
+Average = This paper can use some help, for example when you say that "dogs are part of the wolf pack" we can say something else like "Dogs were ONCE part of a wolfs as a descendents".
+
+8. Points total. (The total amount of points in this assignment)
+95
+
+    Your goal is to provide detailed, personalized, and accurate feedback for each section of the paper. The feedback should:
+
+    1.  Strictly adhere to the rubric for grading. Ensure that the final grade aligns with the rubric’s criteria, even if Llama’s pre-analysis suggests a different grade. Accuracy and consistency are the priority.
+    2.  Use the “Look Out For” section to perform a more focused analysis where needed. This section allows for deeper analysis based on the teacher’s specific flags, ensuring the feedback is comprehensive and adaptable across subjects.
+    3.  Incorporate Llama’s pre-analysis as a guide but adjust it according to the rubric and deeper analysis. The final grade should reflect the most accurate evaluation based on the teacher’s criteria, not the preliminary analysis.
+    4.  Dynamically adjust the teacher’s personalized tone based on the quality of the paper. For poor papers, the tone should reflect the teacher’s typical blunt feedback, while for stronger papers, the tone should be more detailed and encouraging. This ensures a personalized grading experience for each student.
+    5.  Provide feedback in a structured format:
+    •   Title each section based on the rubric (e.g., “Description of Organization”).
+    •   Below the title, write a detailed paragraph that analyzes the student’s performance in that section, covering both strengths and weaknesses.
+    •   After the paragraph, include a bullet-point list summarizing the key points of feedback for that section. This list should be concise, highlighting the most critical insights and areas for improvement.
+    6.  Offer next steps for improvement. In each section, provide actionable recommendations for the student to apply in future assignments, such as areas they need to explore further, or suggestions for improving analysis or argumentation.
+    7.  Ensure consistency and accuracy in grading, with a focus on detailed precision. While Llama’s pre-analysis provides a useful starting point, your final grade and feedback should reflect a thorough evaluation based on the rubric. All processes should remain seamless and distraction-free for the teacher.
+
+    Example of output:
+
+    Description of Organization
+    In this section, the student provides a basic description of the organization but lacks depth in discussing the company’s specific challenges. The connection between the unqualified CEO and the organization’s operations is mentioned, but more detailed examples would strengthen this section. The paper would benefit from further clarification on how these challenges impacted the company’s broader performance.
+
+    Key Points:
+
+    •   The basic description is provided, but lacks depth.
+    •   More examples needed to clarify the company’s challenges.
+    •   Further explanation required on how leadership issues impacted operations.
+
+    Next Steps:
+    To improve, the student should focus on providing more detailed examples of the company’s operational challenges and how leadership played a role in these issues. More in-depth analysis of specific problems would strengthen the paper overall.
+
+    Your final output should include:
+
+    •   The adjusted grade based on the rubric.
+    •   Detailed feedback, structured with section titles, paragraphs, and bullet-point summaries, all in the teacher’s personalized tone.
+    •   Specific next steps for student improvement across each section.

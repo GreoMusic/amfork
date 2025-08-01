@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acadex Mini - Student Interface</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Open+Sans&family=Inter&family=SF+Pro+Display:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Glassmorphic effects */
+    .backdrop-blur-glass {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      position: relative;
+    }
+
+    .glass-layer::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.15), transparent);
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
+    .editor-content {
+      min-height: 700px;
+      padding: 2rem;
+      outline: none;
+      font-family: 'SF Pro Display', sans-serif;
+      background-color: white;
+      border-radius: 0.75rem;
+    }
+
+    /* Animations */
+    .slide-in-left {
+      animation: slideInLeft 0.5s ease-out forwards;
+    }
+
+    @keyframes slideInLeft {
+      from {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .shimmer {
+      background: linear-gradient(to right, #f6f7f8 0%, #edeef0 20%, #f6f7f8 40%, #f6f7f8 100%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite linear;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Dark mode scrollbar for contrast */
+    body.dark-mode ::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    body.dark-mode ::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-400 to-purple-600 min-h-screen flex items-center justify-center p-4 transition-all duration-500">
+  <div class="relative w-full max-w-7xl mx-auto backdrop-blur-glass bg-white bg-opacity-10 rounded-xl shadow-lg p-6 lg:p-8 flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6 glass-layer">
+    <div class="lg:w-1/3 bg-white bg-opacity-20 rounded-lg p-6 space-y-6 flex flex-col border border-white border-opacity-30 backdrop-filter backdrop-blur-sm">
+      <div class="flex items-center justify-between pb-4 border-b border-white border-opacity-30">
+        <div class="flex items-center space-x-3">
+          <img id="profile-pic" src="https://via.placeholder.com/40" alt="Profile" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white">
+          <input type="file" id="profilePicInput" class="hidden" accept="image/*">
+          <h2 class="text-white text-lg font-bold">Acadex Mini</h2>
+        </div>
+        <div class="flex space-x-2">
+            <label class="switch relative inline-block w-10 h-6">
+                <input type="checkbox" id="darkModeToggle" class="opacity-0 w-0 h-0 peer">
+                <span class="slider round absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-300 rounded-full before:absolute before:content-[''] before:h-5 before:w-5 before:left-0.5 before:bottom-0.5 before:bg-white before:rounded-full before:transition-transform peer-checked:bg-blue-600 peer-checked:before:translate-x-4"></span>
+            </label>
+            <div class="relative">
+                <button id="backgroundThemeButton" class="p-2 rounded-full bg-white bg-opacity-30 text-white hover:bg-opacity-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.162A8.955 8.955 0 0110 3c2.464 0 4.777.947 6.516 2.585C17.483 7.215 18 9.53 18 12a8.955 8.955 0 01-1.484 5.815A1 1 0 0115 18H5a1 1 0 01-.516-1.185A8.955 8.955 0 012 12c0-2.47 0-4.785 1.484-6.415C5.223 3.947 7.536 3 10 3a8.955 8.955 0 015 1.162V3a1 1 0 011-1zM4.093 6.643a7.025 7.025 0 00-.071 5.357c.026.79.232 1.5.541 2.113A6.973 6.973 0 0010 16a6.973 6.973 0 005.437-2.887c.309-.613.515-1.323.541-2.113a7.025 7.025 0 00-.071-5.357A6.974 6.974 0 0010 5a6.974 6.974 0 00-5.907 1.643zM8 8a1 1 0 100 2h4a1 1 0 100-2H8z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+                <div id="backgroundThemeDropdown" class="absolute right-0 mt-2 w-48 bg-white bg-opacity-90 rounded-md shadow-lg py-1 z-10 hidden">
+                    <label class="block px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer">
+                        <input type="radio" name="background-theme" value="default-blue" class="mr-2" checked> Default Blue
+                    </label>
+                    <label class="block px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer">
+                        <input type="radio" name="background-theme" value="ocean-green" class="mr-2"> Ocean Green
+                    </label>
+                    <label class="block px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer">
+                        <input type="radio" name="background-theme" value="sunset-orange" class="mr-2"> Sunset Orange
+                    </label>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <h3 class="text-white text-md font-semibold opacity-80">Assignment:</h3>
+        <p id="assignment-title" class="text-white text-xl font-bold">Loading...</p>
+      </div>
+
+      <div class="space-y-2 flex-grow overflow-y-auto custom-scrollbar">
+        <h3 class="text-white text-md font-semibold opacity-80">Rubric:</h3>
+        <div id="rubric-content" class="text-white text-opacity-80 text-sm leading-relaxed space-y-2">
+          Loading...
+        </div>
+      </div>
+
+      <button id="final-feedback-button" class="mt-auto w-full py-3 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 transition-colors duration-200">
+        Get Final Feedback
+      </button>
+    </div>
+
+    <div class="lg:w-2/3 bg-white rounded-lg shadow-xl flex flex-col border border-gray-200">
+      <div id="ai-message-container" class="bg-gray-50 p-4 rounded-t-lg border-b border-gray-200">
+        <p id="ai-message" class="text-gray-700 italic">Let's get started! What's the first thing you want to write?</p>
+      </div>
+
+      <div id="editor" contenteditable="true" class="editor-content flex-grow overflow-y-auto custom-scrollbar">
+        </div>
+
+      <div class="bg-gray-50 p-4 rounded-b-lg border-t border-gray-200 flex items-center justify-between flex-wrap gap-3">
+        <div class="flex items-center space-x-2">
+          <button id="boldButton" class="p-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold">B</button>
+          <button id="italicButton" class="p-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700 italic">I</button>
+          <button id="underlineButton" class="p-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700 underline">U</button>
+          <button id="imageButton" class="p-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-4 3 3 5-5V15zM11 9a2 2 111-4 0 00-4 0z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+        <div class="text-sm text-gray-600">
+          Word Count: <span id="word-count">0</span> | Character Count: <span id="char-count">0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white p-6 rounded-lg shadow-xl w-96">
+      <h3 class="text-lg font-bold mb-4">Insert Image</h3>
+      <input type="file" id="imageUploadInput" accept="image/*" class="mb-4">
+      <div class="flex justify-end space-x-4">
+        <button id="cancelImageButton" class="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300">Cancel</button>
+        <button id="insertImageButton" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Insert</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const assignmentData = {
+    "Linear Algebra Problems": {
+      title: "Linear Algebra Problems",
+      rubric: `**Problem Solving (40%)**
+- Correctly identifies the problem type and selects appropriate solution method
+- Shows all intermediate steps in the solution process
+- Demonstrates understanding of linear transformations
+
+**Accuracy (30%)**
+- Correctly solves equations and systems of equations
+- Minimal calculation errors in matrix operations
+- Proper application of determinants and eigenvalues
+
+**Explanation (30%)**
+- Clearly explains the reasoning behind each solution step
+- Provides context for the mathematical concepts applied
+- Justifies solutions with appropriate mathematical reasoning`
+    },
+    "Climate Change Report": {
+      title: "Climate Change Report",
+      rubric: `**Content (40%)**
+- Defines renewable energy comprehensively
+- Describes at least three different types of renewable energy
+- Discusses the reduction of greenhouse gas emissions and its effect on climate change
+
+**Structure (30%)**
+- Clear introduction with a strong thesis statement
+- Well-organized body paragraphs with clear topic sentences
+- Conclusive summary reinforcing main arguments
+
+**Research (30%)**
+- Uses at least three credible sources
+- Properly cites all sources in APA format
+- Incorporates research effectively to support claims`
+    },
+    "Analysis of Shakespeare's Macbeth": {
+      title: "Analysis of Shakespeare's Macbeth",
+      rubric: `**Literary Analysis (40%)**
+- Identifies and analyzes key themes (e.g., ambition, fate, guilt)
+- Explores character development (e.g., Macbeth, Lady Macbeth)
+- Examines literary devices (e.g., imagery, symbolism, soliloquy)
+
+**Argumentation (30%)**
+- Develops a clear and arguable thesis statement
+- Supports arguments with specific textual evidence
+- Provides insightful interpretations of evidence
+
+**Writing Mechanics (30%)**
+- Clear and concise language
+- Correct grammar, punctuation, and spelling
+- Adheres to essay structure (intro, body, conclusion)`
+    }
+  };
+
+  let currentAssignmentName = "Linear Algebra Problems"; // Default assignment
+  let currentAssignmentData = assignmentData[currentAssignmentName];
+  let previousEditorContentForLisa = ''; // Stores content of editor after last Lisa prompt
+  let aiPromptDisplayed = false; // To track if AI has given a prompt for current section
+  let inactivityTimer;
+  let wordCountTimeout;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const editor = document.getElementById('editor');
+    const aiMessage = document.getElementById('ai-message');
+    const wordCountSpan = document.getElementById('word-count');
+    const charCountSpan = document.getElementById('char-count');
+    const assignmentTitleDisplay = document.getElementById('assignment-title');
+    const rubricContentDisplay = document.getElementById('rubric-content');
+    const finalFeedbackButton = document.getElementById('final-feedback-button');
+    const profilePic = document.getElementById('profile-pic');
+    const profilePicInput = document.getElementById('profilePicInput');
+    const imageButton = document.getElementById('imageButton');
+    const imageModal = document.getElementById('imageModal');
+    const insertImageButton = document.getElementById('insertImageButton');
+    const cancelImageButton = document.getElementById('cancelImageButton');
+    const imageUploadInput = document.getElementById('imageUploadInput');
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const backgroundThemeButton = document.getElementById('backgroundThemeButton');
+    const backgroundThemeDropdown = document.getElementById('backgroundThemeDropdown');
+
+
+    // Function to set assignment data
+    function setAssignment(assignmentName) {
+        currentAssignmentName = assignmentName;
+        currentAssignmentData = assignmentData[assignmentName];
+        assignmentTitleDisplay.textContent = currentAssignmentData.title;
+        rubricContentDisplay.innerHTML = currentAssignmentData.rubric
+            .split('\n')
+            .map(line => {
+                if (line.startsWith('**')) {
+                    return `<p class="font-bold mt-2">${line.replace(/\*\*/g, '')}</p>`;
+                } else if (line.startsWith('- ')) {
+                    return `<p class="ml-4 text-sm">- ${line.substring(2)}</p>`;
+                }
+                return `<p>${line}</p>`;
+            })
+            .join('');
+        editor.innerHTML = ''; // Clear editor for new assignment
+        previousEditorContentForLisa = ''; // Reset previous content
+        aiPromptDisplayed = false; // Reset prompt display status
+        aiMessage.textContent = "Let's get started! What's the first thing you want to write?"; // Initial prompt
+    }
+
+    // Set initial assignment
+    setAssignment(currentAssignmentName);
+
+    // AI Message Typing Effect
+    function typeAIMessage(message, type = "ai-text", callback = null) {
+        aiMessage.innerHTML = ''; // Clear previous message
+        const messageElement = document.createElement('span');
+        messageElement.className = type === "ai-text" ? "text-gray-700 italic" : "text-red-500 italic";
+        aiMessage.appendChild(messageElement);
+
+        const typingDelay = 10; // milliseconds per character
+        let i = 0;
+
+        // Add a shimmer effect to the container while typing
+        const container = document.getElementById('ai-message-container');
+        container.classList.add('shimmer');
+
+        function typeChar() {
+            if (i < message.length) {
+                messageElement.textContent += message[i];
+                i++;
+                setTimeout(typeChar, typingDelay);
+            } else {
+                container.classList.remove('shimmer'); // Remove shimmer after typing
+                if (callback) callback();
+            }
+        }
+        typeChar();
+    }
+
+    // Modal functions
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.remove('hidden');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.add('hidden');
+    }
+
+    // Image insertion logic
+    function handleImageInsertion() {
+      const file = imageUploadInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.classList.add('max-w-full', 'h-auto', 'my-2', 'rounded-md', 'shadow-md');
+          img.contentEditable = 'false'; // Make image non-editable text-wise
+          editor.appendChild(img);
+          closeModal('imageModal');
+          // Optional: Add a line break after the image for better formatting
+          editor.appendChild(document.createElement('br'));
+          editor.focus();
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Dark Mode Toggle
+    darkModeToggle.addEventListener('change', () => {
+        document.body.classList.toggle('dark-mode', darkModeToggle.checked);
+        document.body.classList.toggle('bg-gradient-to-br', !darkModeToggle.checked);
+        document.body.classList.toggle('from-gray-800', darkModeToggle.checked);
+        document.body.classList.toggle('to-gray-900', darkModeToggle.checked);
+        
+        // Adjust glassmorphic elements for dark mode
+        document.querySelectorAll('.backdrop-blur-glass, .glass-layer').forEach(el => {
+            if (darkModeToggle.checked) {
+                el.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
+                el.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+            } else {
+                el.style.backgroundColor = ''; // Revert to default in CSS
+                el.style.borderColor = ''; // Revert to default in CSS
+            }
+        });
+    });
+
+    // Background Theme Dropdown
+    backgroundThemeButton.addEventListener('click', () => {
+        backgroundThemeDropdown.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!backgroundThemeButton.contains(event.target) && !backgroundThemeDropdown.contains(event.target)) {
+            backgroundThemeDropdown.classList.add('hidden');
+        }
+    });
+
+    // Apply Background Gradient
+    function applyBackgroundGradient(theme) {
+        const body = document.body;
+        body.className = ''; // Clear existing classes
+        body.classList.add('min-h-screen', 'flex', 'items-center', 'justify-center', 'p-4', 'transition-all', 'duration-500');
+
+        switch (theme) {
+            case 'default-blue':
+                body.classList.add('bg-gradient-to-br', 'from-blue-400', 'to-purple-600');
+                break;
+            case 'ocean-green':
+                body.classList.add('bg-gradient-to-br', 'from-green-400', 'to-blue-600');
+                break;
+            case 'sunset-orange':
+                body.classList.add('bg-gradient-to-br', 'from-orange-400', 'to-red-600');
+                break;
+            default:
+                body.classList.add('bg-gradient-to-br', 'from-blue-400', 'to-purple-600');
+        }
+
+        // Re-apply dark mode if it was active
+        if (darkModeToggle.checked) {
+            body.classList.add('dark-mode', 'from-gray-800', 'to-gray-900');
+        }
+    }
+
+
+    // --- Core Logic for Editor and LISA Interaction ---
+
+    editor.addEventListener('input', async () => {
+        const userText = editor.textContent || '';
+        const currentLength = userText.length;
+
+        // **NEW: Client-side formula detection to bypass debounce**
+        const isFormula = /(?:y\s*=\s*mx\s*\+\s*b)|(?:f\s*\(.*\)\s*=\s*.*)|(?:\b\d+\s*[\+\-\*\/]\s*\d+.*=\s*\d+)/i.test(userText);
+
+        if (isFormula) {
+            console.log("Formula detected on frontend, sending immediately!");
+            if (inactivityTimer) {
+                clearTimeout(inactivityTimer);
+            }
+            const lisaResponse = await getLisaPrompt(
+                userText,
+                currentAssignmentData.title,
+                currentAssignmentData.rubric,
+                false, // inactivity_timer_fired: false (because we're sending immediately)
+                false, // paragraph_finished (let backend handle)
+                true,  // sentence_finished: true (assuming formula is a completed thought)
+                previousEditorContentForLisa,
+                true // is_formula_completion: true
+            );
+            previousEditorContentForLisa = userText;
+            typeAIMessage(lisaResponse, "ai-text");
+            aiPromptDisplayed = true;
+            console.log("aiPromptDisplayed set to true due to immediate formula detection.");
+            return; // Exit to prevent the debounce from firing later
+        }
+
+        // Clear existing inactivity timer
+        if (inactivityTimer) {
+            clearTimeout(inactivityTimer);
+        }
+
+        // Set a new inactivity timer (1 second debounce for non-formula text)
+        inactivityTimer = setTimeout(async () => {
+            console.log("Inactivity timer fired!");
+            const lisaResponse = await getLisaPrompt(
+                userText,
+                currentAssignmentData.title,
+                currentAssignmentData.rubric,
+                true, // inactivity_timer_fired is true
+                false, // paragraph_finished (handled by backend or separate logic)
+                false, // sentence_finished (handled by backend or separate logic)
+                previousEditorContentForLisa,
+                false // is_formula_completion will be handled by backend primarily unless explicitly signaled
+            );
+            previousEditorContentForLisa = userText;
+            typeAIMessage(lisaResponse, "ai-text");
+            // Set prompt displayed state
+            aiPromptDisplayed = true;
+            console.log("aiPromptDisplayed set to true due to inactivity timer.");
+        }, 1000); // 1 second (1000 ms) delay
+
+        // Update word/character counts
+        clearTimeout(wordCountTimeout);
+        wordCountTimeout = setTimeout(() => {
+            const words = userText.split(/\s+/).filter(word => word.length > 0).length;
+            wordCountSpan.textContent = words;
+            charCountSpan.textContent = currentLength;
+        }, 100); // Debounce count update for performance
+    });
+
+    editor.addEventListener('keyup', async (event) => {
+        const userText = editor.textContent || '';
+        const currentLength = userText.length;
+
+        if (event.key === 'Enter') {
+            console.log("Enter key pressed. Clearing inactivity timer.");
+            if (inactivityTimer) {
+                clearTimeout(inactivityTimer);
+            }
+
+            // Determine if it's a paragraph end (two consecutive newlines)
+            const isParagraphEnd = userText.endsWith('\n\n');
+
+            const lisaResponse = await getLisaPrompt(
+                userText,
+                currentAssignmentData.title,
+                currentAssignmentData.rubric,
+                false, // inactivity_timer_fired (not due to timer)
+                isParagraphEnd,  // paragraph_finished
+                true,  // sentence_finished (explicitly signal sentence finished on Enter)
+                previousEditorContentForLisa,
+                false // is_formula_completion (backend will handle)
+            );
+            previousEditorContentForLisa = userText;
+            typeAIMessage(lisaResponse, "ai-text");
+            aiPromptDisplayed = true;
+            console.log("aiPromptDisplayed set to true due to Enter key.");
+
+            // Clear editor content if a response was received and it was an explicit paragraph end, for new section
+            if (isParagraphEnd) {
+                // Not clearing editor content immediately for now, let user continue
+                // editor.innerHTML = '';
+            }
+        }
+    });
+
+    // Helper function to call LISA backend
+    async function getLisaPrompt(userText, assignmentTitle, rubric, inactivityTimerFired, paragraphFinished, sentenceFinished, previousUserText, isFormulaCompletion = false, assignmentComplete = false) {
+        try {
+            console.log("Calling LISA prompt with:", { userText, inactivityTimerFired, paragraphFinished, sentenceFinished, isFormulaCompletion, assignmentComplete });
+            const response = await fetch('http://127.0.0.1:5001/lisa_prompt', { // Ensure this matches your LISA server
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_text: userText,
+                    assignment_title: assignmentTitle,
+                    rubric: rubric,
+                    inactivity_timer_fired: inactivityTimerFired,
+                    paragraph_finished: paragraphFinished,
+                    sentence_finished: sentenceFinished, // Pass this directly from frontend signal
+                    previous_user_text: previousUserText,
+                    is_formula_completion: isFormulaCompletion, // Explicitly pass the formula completion signal
+                    assignment_complete: assignmentComplete
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`HTTP error! status: ${response.status}, message: ${errorData.error || 'Unknown error'}`);
+            }
+
+            const data = await response.json();
+            return data.suggested_next_step;
+        } catch (error) {
+            console.error("Error fetching LISA prompt:", error);
+            return `LISA is currently unavailable or encountered an error: ${error.message}. Please try again later.`;
+        }
+    }
+
+
+    // Event listeners for formatting buttons
+    document.getElementById('boldButton').addEventListener('click', () => document.execCommand('bold', false, null));
+    document.getElementById('italicButton').addEventListener('click', () => document.execCommand('italic', false, null));
+    document.getElementById('underlineButton').addEventListener('click', () => document.execCommand('underline', false, null));
+
+    // Profile picture upload
+    if (profilePic) {
+        profilePic.addEventListener('click', () => profilePicInput.click());
+    }
+
+    if (profilePicInput) {
+        profilePicInput.addEventListener('change', handleProfilePicUpload);
+    }
+
+    function handleProfilePicUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                profilePic.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    if (imageButton) imageButton.addEventListener('click', () => openModal('imageModal'));
+    if (insertImageButton) insertImageButton.addEventListener('click', handleImageInsertion);
+    if (cancelImageButton) cancelImageButton.addEventListener('click', () => closeModal('imageModal'));
+
+    // Final Feedback button
+    if (finalFeedbackButton) {
+        finalFeedbackButton.addEventListener('click', async () => {
+            console.log("Final Feedback button clicked.");
+            const userText = editor.textContent || ''; 
+            
+            const finalFeedback = await getLisaPrompt(
+                userText, 
+                currentAssignmentData.title, 
+                currentAssignmentData.rubric, 
+                false, false, false, 
+                previousEditorContentForLisa, 
+                false, 
+                true   
+            );
+            typeAIMessage(finalFeedback, "ai-text"); 
+        });
+    } else {
+        console.error("Final Feedback Button not found!");
+    }
+
+    if (profilePicInput) {
+        profilePicInput.addEventListener('change', handleProfilePicUpload);
+    }
+
+    // Set default background
+    applyBackgroundGradient('default-blue');
+
+    // Add event listeners for background theme radio buttons
+    document.querySelectorAll('input[name="background-theme"]').forEach(radio => {
+      radio.addEventListener('change', (event) => {
+        applyBackgroundGradient(event.target.value);
+      });
+    });
+  });
+
+</script>
+</body>
+</html>

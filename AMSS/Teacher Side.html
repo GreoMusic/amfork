@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acadex - Teacher Platform</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* CSS Reset and Base Styles */
+        :root {
+            --primary-color: #2A4B7C;
+            --accent-color: #34D399;
+            --background-start: #E0F2FE; /* light-blue-100 */
+            --background-end: #F0F9FF; /* light-blue-50 */
+            --text-dark: #1F2937;
+            --text-light: #FFFFFF;
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --inner-glow: 0px 0px 10px rgba(255, 255, 255, 0.7);
+            --soft-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --sidebar-width-collapsed: 80px;
+            --sidebar-width-expanded: 240px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--background-start), var(--background-end));
+            color: var(--text-dark);
+        }
+
+        /* Liquid Glass UI Styles */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--soft-shadow);
+        }
+
+        /* Main App Layout */
+        #app-container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            transition: padding-left 0.3s ease;
+        }
+
+        /* Sidebar */
+        #sidebar {
+            width: var(--sidebar-width-collapsed);
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            transition: width 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+        }
+
+        #sidebar:hover {
+            width: var(--sidebar-width-expanded);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 15px;
+            margin-bottom: 40px;
+            min-height: 50px;
+        }
+
+        .logo-icon {
+            font-size: 28px;
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s;
+            margin-left: 10px;
+        }
+        
+        #sidebar:hover .logo-icon {
+            transform: rotate(-10deg);
+        }
+
+        #sidebar:hover .logo-text {
+            opacity: 1;
+            visibility: visible;
+            transition-delay: 0.1s;
+        }
+
+        #sidebar nav ul {
+            list-style: none;
+            width: 100%;
+        }
+
+        #sidebar nav li a {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        #sidebar nav li a .nav-icon {
+            font-size: 22px;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        #sidebar nav li a .nav-text {
+            margin-left: 20px;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s;
+        }
+
+        #sidebar:hover nav li a .nav-text {
+            opacity: 1;
+            visibility: visible;
+            transition-delay: 0.1s;
+        }
+
+        #sidebar nav li a:hover, #sidebar nav li a.active {
+            color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.5);
+        }
+        
+        #sidebar nav li a:hover::before, #sidebar nav li a.active::before {
+             content: '';
+             position: absolute;
+             left: 0;
+             top: 50%;
+             transform: translateY(-50%);
+             height: 60%;
+             width: 4px;
+             background-color: var(--primary-color);
+             border-radius: 0 4px 4px 0;
+        }
+        
+        #sidebar nav li a:hover, #sidebar nav li a.active {
+            box-shadow: var(--inner-glow);
+        }
+
+        /* Main Content */
+        #main-content {
+            flex-grow: 1;
+            margin-left: var(--sidebar-width-collapsed);
+            padding: 30px;
+            overflow-y: auto;
+            height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+        
+        #sidebar:hover + #main-content {
+             margin-left: var(--sidebar-width-expanded);
+        }
+
+        /* Page/View Styles */
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .page-header p {
+            font-size: 1.1rem;
+            color: #6B7280; /* gray-500 */
+        }
+        
+        /* Cards & Tables */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        
+        .list-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .list-table th, .list-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .list-table th {
+            font-weight: 600;
+            color: #4B5563;
+        }
+
+        .list-table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        .list-table tbody tr:hover {
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        .class-card {
+            padding: 24px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .class-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 16px 40px rgba(31, 38, 135, 0.2);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .card-header h3 {
+             font-size: 1.25rem;
+             font-weight: 600;
+             color: var(--primary-color);
+        }
+        
+        .status-indicator {
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .status-indicator.active {
+            background-color: #D1FAE5; /* green-100 */
+            color: #065F46; /* green-800 */
+        }
+        
+        .status-indicator.archived {
+            background-color: #E5E7EB; /* gray-200 */
+            color: #4B5563; /* gray-600 */
+        }
+        
+        .status-indicator.submitted, .status-indicator.graded {
+             background-color: #D1FAE5;
+             color: #065F46;
+        }
+        .status-indicator.pending {
+            background-color: #FEF3C7; /* amber-100 */
+            color: #92400E; /* amber-800 */
+        }
+
+        .card-body p {
+            margin-bottom: 20px;
+            color: #4B5563;
+        }
+        
+        .card-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 16px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-item .value {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .stat-item .label {
+            font-size: 0.8rem;
+            color: #6B7280;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            box-shadow: 0 4px 12px rgba(42, 75, 124, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(42, 75, 124, 0.4);
+            filter: brightness(1.1);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent-color);
+            color: var(--text-light);
+            box-shadow: 0 4px 12px rgba(52, 211, 153, 0.3);
+        }
+        
+        .btn-accent:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(52, 211, 153, 0.4);
+            filter: brightness(1.1);
+        }
+        
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.7);
+            color: var(--text-dark);
+            border: 1px solid var(--glass-border);
+        }
+        
+        .btn-secondary:hover {
+            background-color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Login/Auth Screen */
+        #auth-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, var(--background-start), var(--background-end));
+            z-index: 2000; transition: opacity 0.5s, visibility 0.5s;
+        }
+        #auth-container.hidden { opacity: 0; visibility: hidden; }
+
+        .auth-box {
+            width: 100%; max-width: 420px; padding: 40px; text-align: center;
+        }
+        .auth-box .logo-container { justify-content: center; margin-bottom: 24px; }
+        .auth-box .logo-icon { font-size: 48px; }
+        .auth-box .logo-text { font-size: 32px; opacity: 1; visibility: visible; }
+        .auth-box h2 { margin-bottom: 8px; font-weight: 600; font-size: 1.5rem; }
+        .auth-box p { margin-bottom: 32px; color: #6B7280; }
+
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 14px 16px; border-radius: 12px;
+            border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.7);
+            font-size: 1rem; transition: all 0.2s ease; font-family: 'Inter', sans-serif;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none; box-shadow: var(--inner-glow), 0 0 0 3px rgba(42, 75, 124, 0.3);
+            border-color: var(--primary-color);
+        }
+        .form-group textarea { resize: vertical; }
+
+        .auth-box .btn { width: 100%; justify-content: center; padding: 16px; font-size: 1.1rem; }
+        .auth-switch { margin-top: 24px; color: #6B7280; }
+        .auth-switch a { color: var(--primary-color); font-weight: 600; text-decoration: none; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #sidebar {
+                transform: translateX(-100%);
+                width: var(--sidebar-width-expanded);
+                transition: transform 0.3s ease;
+                z-index: 1100;
+            }
+            #sidebar.open {
+                transform: translateX(0);
+            }
+            #sidebar:hover {
+                width: var(--sidebar-width-expanded);
+            }
+             #sidebar:hover .logo-text, #sidebar.open .logo-text,
+             #sidebar:hover nav li a .nav-text, #sidebar.open nav li a .nav-text {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            #main-content { margin-left: 0; padding: 15px; }
+            #sidebar:hover + #main-content { margin-left: 0; }
+            .page-header h1 { font-size: 2rem; }
+            .page-header p { display: none; }
+            #mobile-header { display: flex; }
+        }
+        
+        @media (min-width: 769px) { #mobile-header { display: none; } }
+
+        /* Mobile Header */
+        #mobile-header {
+            display: none; padding: 15px; align-items: center; justify-content: space-between;
+            background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 900;
+        }
+        #mobile-header .logo-container { margin-bottom: 0; }
+        #mobile-header .logo-text { opacity: 1; visibility: visible; }
+        #mobile-menu-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--primary-color); }
+        #app-container.mobile-menu-open #main-content::after {
+            content: ''; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 1050;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); display: flex;
+            align-items: center; justify-content: center; z-index: 3000;
+            opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s;
+        }
+        .modal.visible { opacity: 1; visibility: visible; }
+        .modal-content {
+            width: 90%; max-width: 500px; padding: 30px;
+            transform: scale(0.95); transition: transform 0.3s ease;
+        }
+        .modal.visible .modal-content { transform: scale(1); }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 24px;
+        }
+        .modal-header h2 { color: var(--primary-color); font-size: 1.5rem; }
+        .close-modal-btn {
+            background: none; border: none; font-size: 24px;
+            cursor: pointer; color: #9CA3AF;
+        }
+        .close-modal-btn:hover { color: var(--text-dark); }
+    </style>
+</head>
+<body>
+
+    <!-- Authentication -->
+    <div id="auth-container">
+        <!-- Login and Signup Forms -->
+    </div>
+
+    <!-- Main Application -->
+    <div id="app-container" style="visibility: hidden;">
+        <aside id="sidebar"></aside>
+        <header id="mobile-header"></header>
+        <main id="main-content"></main>
+    </div>
+
+    <!-- Modals -->
+    <div id="add-class-modal" class="modal"></div>
+    <div id="add-assignment-modal" class="modal"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- GLOBAL STATE ---
+            let currentClassId = null;
+
+            // --- DATA STORE (localStorage) ---
+            const dataStore = {
+                _initialData: {
+                    user: null,
+                    classes: [
+                        { id: 1, name: 'AP Literature & Comp', subject: 'English', description: 'Advanced analysis of literary works.', status: 'active', studentCount: 28, 
+                          assignments: [
+                            { id: 101, title: 'The Great Gatsby Essay', dueDate: '2025-07-15', status: 'graded' },
+                            { id: 102, title: 'Shakespeare Sonnet Analysis', dueDate: '2025-07-22', status: 'pending' },
+                          ]},
+                        { id: 2, name: 'Creative Writing Workshop', subject: 'English', description: 'Honing the craft of narrative and poetry.', status: 'active', studentCount: 22, assignments: [] },
+                        { id: 3, name: 'Intro to Film Studies', subject: 'Media', description: 'Analyzing the language of cinema.', status: 'active', studentCount: 35, assignments: [] },
+                        { id: 4, name: 'Medieval History', subject: 'History', description: 'From the fall of Rome to the Renaissance.', status: 'archived', studentCount: 31, assignments: [] }
+                    ],
+                    students: [
+                        { id: 201, name: 'Alex Johnson', email: 'alex.j@example.com', status: 'active', completion: 92 },
+                        { id: 202, name: 'Maria Garcia', email: 'maria.g@example.com', status: 'active', completion: 88 },
+                        { id: 203, name: 'Chen Wei', email: 'chen.w@example.com', status: 'inactive', completion: 75 },
+                    ],
+                },
+                init() {
+                    if (!localStorage.getItem('acadex_data')) {
+                        this.saveData(this._initialData);
+                    }
+                },
+                getData() {
+                    let data = localStorage.getItem('acadex_data');
+                    // This is the fix: If localStorage is empty or corrupted,
+                    // re-initialize it to prevent the app from crashing.
+                    if (!data || data === 'null') {
+                        this.init();
+                        data = localStorage.getItem('acadex_data');
+                    }
+                    return JSON.parse(data);
+                },
+                saveData(data) { localStorage.setItem('acadex_data', JSON.stringify(data)); },
+                get(key) { return this.getData()[key]; },
+                set(key, value) {
+                    const data = this.getData();
+                    data[key] = value;
+                    this.saveData(data);
+                },
+                add(key, item) {
+                    const data = this.getData();
+                    const collection = data[key];
+                    const newId = collection.length > 0 ? Math.max(...collection.map(i => i.id)) + 1 : 1;
+                    item.id = newId;
+                    data[key].push(item);
+                    this.saveData(data);
+                },
+                addAssignment(classId, assignment) {
+                    const data = this.getData();
+                    const classObj = data.classes.find(c => c.id === classId);
+                    if (classObj) {
+                        const newId = classObj.assignments.length > 0 ? Math.max(...classObj.assignments.map(a => a.id)) + 1 : 1;
+                        assignment.id = newId;
+                        classObj.assignments.push(assignment);
+                        this.saveData(data);
+                    }
+                },
+            };
+            dataStore.init();
+
+            // --- TEMPLATE & RENDER FUNCTIONS ---
+            const mainContent = document.getElementById('main-content');
+
+            const templates = {
+                auth: `
+                    <div id="login-view" class="auth-box glass-panel">
+                        <div class="logo-container"><i class="fas fa-graduation-cap logo-icon"></i><span class="logo-text">Acadex</span></div>
+                        <h2>Welcome Back!</h2><p>Sign in to continue your teaching journey.</p>
+                        <form id="login-form">
+                            <div class="form-group"><label for="login-email">Email</label><input type="email" id="login-email" required value="teacher@acadex.com"></div>
+                            <div class="form-group"><label for="login-password">Password</label><input type="password" id="login-password" required value="password123"></div>
+                            <button type="submit" class="btn btn-primary">Sign In</button>
+                        </form>
+                        <p class="auth-switch">Don't have an account? <a href="#" id="show-signup">Sign up</a></p>
+                    </div>
+                    <div id="signup-view" class="auth-box glass-panel" style="display:none;">
+                         <h2>Create Your Account</h2><p>Join Acadex and revolutionize your classroom.</p>
+                        <form id="signup-form">
+                            <div class="form-group"><label for="signup-name">Full Name</label><input type="text" id="signup-name" required></div>
+                            <div class="form-group"><label for="signup-email">Email</label><input type="email" id="signup-email" required></div>
+                            <div class="form-group"><label for="signup-password">Password</label><input type="password" id="signup-password" required></div>
+                            <button type="submit" class="btn btn-primary">Sign Up</button>
+                        </form>
+                        <p class="auth-switch">Already have an account? <a href="#" id="show-login">Sign in</a></p>
+                    </div>`,
+                sidebar: `
+                    <div class="logo-container"><i class="fas fa-graduation-cap logo-icon"></i><span class="logo-text">Acadex</span></div>
+                    <nav><ul>
+                        <li><a href="#dashboard" class="nav-link"><i class="fas fa-th-large nav-icon"></i><span class="nav-text">Dashboard</span></a></li>
+                        <li><a href="#students" class="nav-link"><i class="fas fa-user-friends nav-icon"></i><span class="nav-text">Students</span></a></li>
+                        <li><a href="#profile" class="nav-link"><i class="fas fa-user-cog nav-icon"></i><span class="nav-text">Profile</span></a></li>
+                    </ul></nav>
+                    <div style="margin-top: auto; padding: 20px;">
+                         <a href="#" id="logout-btn" class="nav-link"><i class="fas fa-sign-out-alt nav-icon"></i><span class="nav-text">Logout</span></a>
+                    </div>`,
+                mobileHeader: `
+                    <div class="logo-container"><i class="fas fa-graduation-cap logo-icon"></i><span class="logo-text">Acadex</span></div>
+                    <button id="mobile-menu-btn"><i class="fas fa-bars"></i></button>`,
+                dashboard: (user) => `
+                    <div id="dashboard" class="page">
+                        <header class="page-header"><div><h1>Dashboard</h1><p>Welcome back, ${user.name}. Here's an overview of your classes.</p></div></header>
+                        <div style="margin-bottom: 24px; text-align: right;"><button class="btn btn-accent" id="add-class-btn"><i class="fas fa-plus"></i> Create New Class</button></div>
+                        <div class="card-grid" id="class-grid"></div>
+                    </div>`,
+                classDetail: (cls) => `
+                    <div id="class-detail" class="page">
+                         <header class="page-header">
+                            <a href="#dashboard" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left"></i> Back</a>
+                            <div><h1>${cls.name}</h1><p>${cls.subject}</p></div>
+                         </header>
+                         <div style="margin-bottom: 24px; text-align: right;"><button class="btn btn-accent" id="add-assignment-btn"><i class="fas fa-plus"></i> New Assignment</button></div>
+                         <div class="glass-panel" style="padding: 24px;">
+                            <h3>Assignments</h3>
+                            <div id="assignment-list"></div>
+                         </div>
+                    </div>`,
+                students: `
+                    <div id="students" class="page">
+                        <header class="page-header"><h1>Student Management</h1></header>
+                        <div class="glass-panel" style="padding: 24px;"><table class="list-table"><thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Completion</th></tr></thead><tbody id="student-list-body"></tbody></table></div>
+                    </div>`,
+                profile: (user) => `
+                    <div id="profile" class="page">
+                        <header class="page-header"><h1>Profile & Settings</h1></header>
+                        <div class="glass-panel" style="padding: 24px;">
+                           <h2>${user.name}</h2>
+                           <p style="color: #6B7280; margin-bottom: 24px;">${user.email}</p>
+                           <form id="update-profile-form">
+                                <div class="form-group"><label for="update-password">New Password</label><input type="password" id="update-password" placeholder="Enter new password"></div>
+                                <div class="form-group"><label for="confirm-password">Confirm Password</label><input type="password" id="confirm-password" placeholder="Confirm new password"></div>
+                                <button type="submit" class="btn btn-primary">Update Password</button>
+                           </form>
+                        </div>
+                    </div>`,
+                addClassModal: `
+                    <div class="modal-content glass-panel">
+                        <div class="modal-header"><h2>Create New Class</h2><button class="close-modal-btn">&times;</button></div>
+                        <form id="add-class-form">
+                            <div class="form-group"><label for="class-name">Class Name</label><input type="text" id="class-name" required placeholder="e.g., Advanced Placement Physics"></div>
+                            <div class="form-group"><label for="class-subject">Subject</label><input type="text" id="class-subject" required placeholder="e.g., Physics"></div>
+                            <div class="form-group"><label for="class-description">Description</label><textarea id="class-description" rows="3"></textarea></div>
+                            <div style="text-align: right;"><button type="submit" class="btn btn-primary">Create Class</button></div>
+                        </form>
+                    </div>`,
+                addAssignmentModal: `
+                     <div class="modal-content glass-panel">
+                        <div class="modal-header"><h2>Create New Assignment</h2><button class="close-modal-btn">&times;</button></div>
+                        <form id="add-assignment-form">
+                            <div class="form-group"><label for="assignment-title">Title</label><input type="text" id="assignment-title" required></div>
+                            <div class="form-group"><label for="assignment-due-date">Due Date</label><input type="date" id="assignment-due-date" required></div>
+                            <div style="text-align: right;"><button type="submit" class="btn btn-primary">Create Assignment</button></div>
+                        </form>
+                    </div>`
+            };
+
+            const render = {
+                appShell: () => {
+                    document.getElementById('sidebar').innerHTML = templates.sidebar;
+                    document.getElementById('mobile-header').innerHTML = templates.mobileHeader;
+                    document.getElementById('add-class-modal').innerHTML = templates.addClassModal;
+                    document.getElementById('add-assignment-modal').innerHTML = templates.addAssignmentModal;
+                },
+                auth: () => {
+                    document.getElementById('auth-container').innerHTML = templates.auth;
+                },
+                dashboard: (user) => {
+                    mainContent.innerHTML = templates.dashboard(user);
+                    const classGrid = document.getElementById('class-grid');
+                    const classes = dataStore.get('classes');
+                    classGrid.innerHTML = classes.map(cls => `
+                        <div class="class-card glass-panel" data-id="${cls.id}">
+                            <div class="card-header"><h3>${cls.name}</h3><span class="status-indicator ${cls.status}">${cls.status}</span></div>
+                            <div class="card-body"><p>${cls.subject}</p></div>
+                            <div class="card-stats">
+                                <div class="stat-item"><span class="value">${cls.studentCount}</span><span class="label">Students</span></div>
+                                <div class="stat-item"><span class="value">${cls.assignments.length}</span><span class="label">Assignments</span></div>
+                            </div>
+                        </div>`).join('');
+                },
+                classDetail: (classId) => {
+                    const cls = dataStore.get('classes').find(c => c.id === classId);
+                    if (cls) {
+                        currentClassId = classId;
+                        mainContent.innerHTML = templates.classDetail(cls);
+                        const assignmentList = document.getElementById('assignment-list');
+                        if (cls.assignments.length > 0) {
+                            assignmentList.innerHTML = `
+                                <table class="list-table">
+                                    <thead><tr><th>Title</th><th>Due Date</th><th>Status</th></tr></thead>
+                                    <tbody>
+                                        ${cls.assignments.map(a => `
+                                            <tr>
+                                                <td>${a.title}</td>
+                                                <td>${a.dueDate}</td>
+                                                <td><span class="status-indicator ${a.status}">${a.status}</span></td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>`;
+                        } else {
+                            assignmentList.innerHTML = `<p style="text-align:center; padding: 20px; color: #6B7280;">No assignments yet. Create one!</p>`;
+                        }
+                    }
+                },
+                students: () => {
+                    mainContent.innerHTML = templates.students;
+                    const studentListBody = document.getElementById('student-list-body');
+                    const students = dataStore.get('students');
+                    studentListBody.innerHTML = students.map(s => `
+                        <tr>
+                            <td>${s.name}</td>
+                            <td>${s.email}</td>
+                            <td><span class="status-indicator ${s.status}">${s.status}</span></td>
+                            <td>${s.completion}%</td>
+                        </tr>`).join('');
+                },
+                profile: (user) => {
+                    mainContent.innerHTML = templates.profile(user);
+                }
+            };
+
+            // --- ROUTER & PAGE MANAGEMENT ---
+            function router() {
+                const hash = window.location.hash || '#dashboard';
+                const [path, param] = hash.substring(1).split('/');
+                const user = dataStore.get('user');
+
+                if (!user) {
+                    showAuth();
+                    return;
+                }
+                
+                showApp();
+                
+                // Remove active class from all pages/links first
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+
+                let targetPage, activeLink;
+
+                switch (path) {
+                    case 'dashboard':
+                        render.dashboard(user);
+                        break;
+                    case 'class':
+                        render.classDetail(parseInt(param, 10));
+                        break;
+                    case 'students':
+                        render.students();
+                        break;
+                    case 'profile':
+                        render.profile(user);
+                        break;
+                    default:
+                        // Redirect to dashboard for unknown hashes
+                        window.location.hash = 'dashboard';
+                        return;
+                }
+                
+                // Set active link, handle class detail case
+                const linkSelector = (path === 'class') ? `a[href="#dashboard"]` : `a[href="#${path}"]`;
+                activeLink = document.querySelector(linkSelector);
+                if (activeLink) activeLink.classList.add('active');
+
+                // Make sure the main content is visible after rendering
+                mainContent.querySelector('.page').classList.add('active');
+            }
+
+            // --- AUTHENTICATION & UI VISIBILITY ---
+            const authContainer = document.getElementById('auth-container');
+            const appContainer = document.getElementById('app-container');
+
+            function showApp() {
+                authContainer.classList.add('hidden');
+                appContainer.style.visibility = 'visible';
+            }
+
+            function showAuth() {
+                render.auth();
+                authContainer.classList.remove('hidden');
+                appContainer.style.visibility = 'hidden';
+                localStorage.removeItem('acadex_user');
+                dataStore.set('user', null);
+                addAuthEventListeners();
+            }
+
+            function checkAuth() {
+                const user = localStorage.getItem('acadex_user');
+                if (user) {
+                    dataStore.set('user', JSON.parse(user));
+                    render.appShell();
+                    addAppEventListeners();
+                    router();
+                } else {
+                    showAuth();
+                }
+            }
+
+            // --- EVENT LISTENERS ---
+            function addAuthEventListeners() {
+                const loginForm = document.getElementById('login-form');
+                if (loginForm) {
+                    loginForm.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        const user = { name: 'Dr. Evelyn Reed', email: loginForm['login-email'].value };
+                        localStorage.setItem('acadex_user', JSON.stringify(user));
+                        checkAuth();
+                    });
+                }
+                document.getElementById('show-signup')?.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('login-view').style.display = 'none'; document.getElementById('signup-view').style.display = 'block'; });
+                document.getElementById('show-login')?.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('signup-view').style.display = 'none'; document.getElementById('login-view').style.display = 'block'; });
+            }
+
+            function addAppEventListeners() {
+                // Logout
+                document.getElementById('logout-btn').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showAuth();
+                });
+                
+                // Mobile Menu
+                const sidebar = document.getElementById('sidebar');
+                document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+                    sidebar.classList.toggle('open');
+                    appContainer.classList.toggle('mobile-menu-open');
+                });
+                
+                mainContent.addEventListener('click', (e) => {
+                    if (appContainer.classList.contains('mobile-menu-open')) {
+                        sidebar.classList.remove('open');
+                        appContainer.classList.remove('mobile-menu-open');
+                    }
+                });
+
+                // Modal Handling
+                const modals = document.querySelectorAll('.modal');
+                function openModal(modalId) { document.getElementById(modalId).classList.add('visible'); }
+                function closeModal(modal) { modal.classList.remove('visible'); }
+                
+                modals.forEach(modal => {
+                    modal.addEventListener('click', (e) => {
+                        if (e.target.classList.contains('close-modal-btn') || e.target.classList.contains('modal')) {
+                            closeModal(modal);
+                        }
+                    });
+                });
+                
+                // Dynamic Event Delegation for main content
+                mainContent.addEventListener('click', (e) => {
+                    const classCard = e.target.closest('.class-card');
+                    if (classCard) {
+                        window.location.hash = `class/${classCard.dataset.id}`;
+                    }
+                    if (e.target.id === 'add-class-btn') {
+                        openModal('add-class-modal');
+                    }
+                    if (e.target.id === 'add-assignment-btn') {
+                        openModal('add-assignment-modal');
+                    }
+                });
+                
+                // Form Submissions
+                document.getElementById('add-class-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const newClass = {
+                        name: document.getElementById('class-name').value, subject: document.getElementById('class-subject').value,
+                        description: document.getElementById('class-description').value, status: 'active', studentCount: 0, assignments: []
+                    };
+                    dataStore.add('classes', newClass);
+                    closeModal(document.getElementById('add-class-modal'));
+                    e.target.reset();
+                    router();
+                });
+
+                document.getElementById('add-assignment-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const newAssignment = {
+                        title: document.getElementById('assignment-title').value,
+                        dueDate: document.getElementById('assignment-due-date').value,
+                        status: 'pending'
+                    };
+                    dataStore.addAssignment(currentClassId, newAssignment);
+                    closeModal(document.getElementById('add-assignment-modal'));
+                    e.target.reset();
+                    render.classDetail(currentClassId);
+                });
+            }
+            
+            // --- INITIALIZATION ---
+            window.addEventListener('hashchange', router);
+            checkAuth(); // Start the app
+        });
+    </script>
+</body>
+</html>

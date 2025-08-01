@@ -1,0 +1,249 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Class/Group Service Models
+
+model Class {
+  id          String   @id @default(cuid())
+  name        String   @db.VarChar(255)
+  description String?  @db.Text
+  subject     String   @db.VarChar(100)
+  grade       String   @db.VarChar(50)
+  section     String?  @db.VarChar(10)
+  academicYear String  @db.VarChar(20)
+  semester    String?  @db.VarChar(20)
+  isActive    Boolean  @default(true)
+  maxStudents Int?     @default(30)
+  joinCode    String   @unique @db.VarChar(10) // QR code identifier
+  joinCodeExpiresAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relationships
+  teacherId   String
+  teacher     User     @relation(fields: [teacherId], references: [id])
+  
+  groups      Group[]
+  enrollments ClassEnrollment[]
+  assignments Assignment[]
+  announcements Announcement[]
+
+  @@index([teacherId])
+  @@index([joinCode])
+  @@index([academicYear, semester])
+}
+
+model Group {
+  id          String   @id @default(cuid())
+  name        String   @db.VarChar(255)
+  description String?  @db.Text
+  maxMembers  Int?     @default(5)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relationships
+  classId     String
+  class       Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  
+  members     GroupMember[]
+  assignments GroupAssignment[]
+
+  @@index([classId])
+}
+
+model GroupMember {
+  id        String   @id @default(cuid())
+  role      GroupRole @default(MEMBER)
+  joinedAt  DateTime @default(now())
+  isActive  Boolean  @default(true)
+
+  // Relationships
+  groupId   String
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  
+  studentId String
+  student   User     @relation(fields: [studentId], references: [id])
+
+  @@unique([groupId, studentId])
+  @@index([groupId])
+  @@index([studentId])
+}
+
+model ClassEnrollment {
+  id        String   @id @default(cuid())
+  status    EnrollmentStatus @default(ACTIVE)
+  enrolledAt DateTime @default(now())
+  leftAt    DateTime?
+  grade     String?  @db.VarChar(10)
+  notes     String?  @db.Text
+
+  // Relationships
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  
+  studentId String
+  student   User     @relation(fields: [studentId], references: [id])
+
+  @@unique([classId, studentId])
+  @@index([classId])
+  @@index([studentId])
+  @@index([status])
+}
+
+model Assignment {
+  id          String   @id @default(cuid())
+  title       String   @db.VarChar(255)
+  description String?  @db.Text
+  instructions String? @db.Text
+  dueDate     DateTime
+  maxScore    Int      @default(100)
+  weight      Float    @default(1.0)
+  isGroup     Boolean  @default(false)
+  allowLate   Boolean  @default(false)
+  latePenalty Float    @default(0.1) // 10% penalty per day
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relationships
+  classId     String
+  class       Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  
+  submissions AssignmentSubmission[]
+  groupAssignments GroupAssignment[]
+
+  @@index([classId])
+  @@index([dueDate])
+}
+
+model AssignmentSubmission {
+  id        String   @id @default(cuid())
+  title     String   @db.VarChar(255)
+  content   String?  @db.Text
+  fileUrl   String?  @db.VarChar(500)
+  submittedAt DateTime @default(now())
+  score     Float?
+  feedback  String?  @db.Text
+  isLate    Boolean  @default(false)
+  status    SubmissionStatus @default(SUBMITTED)
+
+  // Relationships
+  assignmentId String
+  assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  
+  studentId    String
+  student      User       @relation(fields: [studentId], references: [id])
+
+  @@index([assignmentId])
+  @@index([studentId])
+  @@index([status])
+}
+
+model GroupAssignment {
+  id        String   @id @default(cuid())
+  assignedAt DateTime @default(now())
+  dueDate   DateTime
+  status    GroupAssignmentStatus @default(ASSIGNED)
+
+  // Relationships
+  groupId      String
+  group        Group      @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  
+  assignmentId String
+  assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, assignmentId])
+  @@index([groupId])
+  @@index([assignmentId])
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  title     String   @db.VarChar(255)
+  content   String   @db.Text
+  priority  AnnouncementPriority @default(NORMAL)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  @@index([classId])
+  @@index([priority])
+}
+
+// User model (referenced from Auth Service)
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique @db.VarChar(255)
+  firstName String   @db.VarChar(100)
+  lastName  String   @db.VarChar(100)
+  role      UserRole
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships (as teacher)
+  classes   Class[]
+  
+  // Relationships (as student)
+  enrollments ClassEnrollment[]
+  groupMemberships GroupMember[]
+  submissions AssignmentSubmission[]
+
+  @@index([role])
+  @@index([email])
+}
+
+// Enums
+enum UserRole {
+  TEACHER
+  STUDENT
+  ADMIN
+}
+
+enum GroupRole {
+  LEADER
+  MEMBER
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  GRADUATED
+}
+
+enum SubmissionStatus {
+  DRAFT
+  SUBMITTED
+  GRADED
+  LATE
+  OVERDUE
+}
+
+enum GroupAssignmentStatus {
+  ASSIGNED
+  IN_PROGRESS
+  COMPLETED
+  OVERDUE
+}
+
+enum AnnouncementPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+} 

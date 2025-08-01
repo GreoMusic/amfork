@@ -1,0 +1,32 @@
+# rubric.txt (or rubric.md)
+**Introduction (10%)**
+- Clearly introduce the topic of renewable energy and its importance.
+- Provide a concise thesis statement outlining the main arguments.
+
+**Definition and Types of Renewable Energy (20%)**
+- Define renewable energy comprehensively.
+- Describe at least three different types of renewable energy (e.g., solar, wind, hydro, geothermal, biomass) with examples.
+- Explain the fundamental principles of how each chosen type generates energy.
+
+**Environmental Benefits (25%)**
+- Analyze the positive environmental impacts of shifting to renewable energy sources.
+- Discuss the reduction of greenhouse gas emissions and its effect on climate change.
+- Address other ecological benefits like reduced air/water pollution and resource conservation.
+
+**Economic Effects and Challenges (25%)**
+- Examine the economic implications of renewable energy adoption (e.g., job creation, energy costs, investment).
+- Discuss challenges and barriers to widespread implementation (e.g., intermittency, storage, infrastructure, initial costs).
+- Propose potential solutions or policy approaches to overcome these economic hurdles.
+
+**Conclusion (10%)**
+- Summarize the main arguments presented in the essay.
+- Restate the thesis in a new way.
+- Offer a final thought or call to action regarding the future of renewable energy.
+
+**Organization and Clarity (5%)**
+- Essay is well-structured with clear paragraphs and logical transitions.
+- Ideas are presented coherently and easy to follow.
+
+**Grammar, Punctuation, and Spelling (5%)**
+- Minimal errors in grammar, punctuation, and spelling.
+- Adherence to academic writing conventions.

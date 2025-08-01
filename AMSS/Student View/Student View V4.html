@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acadex Mini - Student Interface</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Open+Sans&family=Inter&family=SF+Pro+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* Existing styles remain unchanged */
+
+    /* ===== NEW STYLES ===== */
+    /* Ghost Text Styles */
+    .ghost-text {
+      color: #B0B0B0;
+      opacity: 0.7;
+      pointer-events: none;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .ghost-text.solid {
+      color: inherit;
+      opacity: 1;
+      animation: fadeInText 0.3s ease-in;
+    }
+    
+    @keyframes fadeInText {
+      from { opacity: 0.7; }
+      to { opacity: 1; }
+    }
+    
+    /* Moment of Insight Animation */
+    @keyframes insightGlow {
+      0% { text-shadow: 0 0 5px rgba(100, 200, 255, 0); }
+      50% { text-shadow: 0 0 10px rgba(100, 200, 255, 0.7); }
+      100% { text-shadow: 0 0 5px rgba(100, 200, 255, 0); }
+    }
+    
+    .insight-highlight {
+      animation: insightGlow 1.5s ease;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Flow State Animation */
+    .flow-state-active {
+      animation: gradientMorph 10s ease infinite alternate !important;
+    }
+    
+    /* Micro-Animation Enhancements */
+    .toolbar-button {
+      transition: all 0.2s ease-in-out;
+    }
+    
+    .toolbar-button:active {
+      transform: scale(0.95);
+    }
+    
+    .toolbar-button:hover {
+      transform: translateY(-1px);
+    }
+    
+    .glass-card-extreme {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .glass-card-extreme:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Welcome Dashboard Styles */
+    .welcome-header {
+      animation: fadeSlideUp 0.8s ease-out;
+    }
+    
+    .streak-counter {
+      animation-delay: 0.2s;
+    }
+    
+    .personal-stats {
+      animation-delay: 0.4s;
+    }
+    
+    .lisa-message {
+      animation-delay: 0.6s;
+    }
+    
+    .streak-fire {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen text-gray-900 font-sans" style="background-image: linear-gradient(to bottom right, #eff6ff, #dbeafe);">
+  <!-- Existing HTML remains unchanged -->
+
+  <main id="app" class="pt-24 px-6 max-w-7xl mx-auto">
+    <!-- Existing QR modal remains unchanged -->
+    
+    <section id="dashboard" class="space-y-12">
+      <!-- ===== NEW WELCOME DASHBOARD ===== -->
+      <div class="welcome-header bg-white/30 backdrop-blur-glass rounded-xl shadow-lg p-6 mb-6 border border-white border-opacity-20 glass-layer">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+          <div>
+            <h2 class="text-2xl font-bold mb-2">Welcome back, <span class="text-blue-600">Sarah!</span></h2>
+            <p class="text-gray-600">Ready to continue your learning journey?</p>
+          </div>
+          
+          <div class="flex items-center mt-4 md:mt-0">
+            <div class="streak-counter bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold py-2 px-4 rounded-full flex items-center mr-4">
+              <i class="fas fa-fire streak-fire mr-2"></i>
+              <span>7-day streak</span>
+            </div>
+            <div class="personal-stats bg-white/20 backdrop-blur-glass rounded-lg py-2 px-4">
+              <p class="text-sm font-semibold"><i class="fas fa-pencil-alt mr-2 text-blue-500"></i> 2,458 words this week</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="lisa-message mt-6 p-4 bg-blue-50/50 rounded-lg border border-blue-200/30">
+          <div class="flex">
+            <i class="fas fa-brain text-blue-600 text-xl mr-3 mt-1"></i>
+            <div>
+              <p class="font-semibold text-blue-800">LISA's tip for today:</p>
+              <p class="text-blue-700">"Start with your Physics report - you made great progress yesterday!"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Existing class cards remain unchanged -->
+    </section>
+    
+    <!-- Other sections remain unchanged -->
+  </main>
+  
+  <script>
+    // ===== NEW FEATURES =====
+    
+    // Ghost Text Implementation
+    let ghostTextTimeout;
+    let currentGhostElement = null;
+    
+    function insertGhostText(promptText) {
+      if (!editor) return;
+      
+      // Remove any existing ghost text
+      if (currentGhostElement) {
+        currentGhostElement.remove();
+        currentGhostElement = null;
+      }
+      
+      // Create ghost text element
+      const ghostElement = document.createElement('span');
+      ghostElement.className = 'ghost-text';
+      ghostElement.textContent = promptText;
+      
+      // Insert at cursor position
+      const selection = window.getSelection();
+      if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        range.insertNode(ghostElement);
+        range.collapse(false); // Move cursor to end
+      } else {
+        editor.appendChild(ghostElement);
+      }
+      
+      currentGhostElement = ghostElement;
+      
+      // Add event listeners
+      ghostElement.addEventListener('click', convertGhostToSolid);
+    }
+    
+    function convertGhostToSolid() {
+      if (currentGhostElement) {
+        currentGhostElement.classList.add('solid');
+        currentGhostElement.removeEventListener('click', convertGhostToSolid);
+        currentGhostElement = null;
+      }
+    }
+    
+    // Moment of Insight Highlight
+    function highlightInsight(textRange) {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = textRange;
+      
+      const insightSpan = document.createElement('span');
+      insightSpan.className = 'insight-highlight';
+      insightSpan.innerHTML = tempDiv.innerHTML;
+      
+      // Replace the text with highlighted version
+      const range = window.getSelection().getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(insightSpan);
+      
+      // Remove the highlight after animation completes
+      setTimeout(() => {
+        insightSpan.classList.remove('insight-highlight');
+        insightSpan.outerHTML = insightSpan.innerHTML;
+      }, 1500);
+    }
+    
+    // Flow State Detection
+    let flowStateActive = false;
+    let flowStateTimer;
+    let typingStartTime = 0;
+    
+    function startFlowDetection() {
+      editor.addEventListener('keydown', () => {
+        if (!typingStartTime) {
+          typingStartTime = Date.now();
+        }
+        
+        clearTimeout(flowStateTimer);
+        flowStateTimer = setTimeout(() => {
+          const typingDuration = Date.now() - typingStartTime;
+          if (typingDuration > 30000 && !flowStateActive) { // 30 seconds
+            document.querySelector('.animated-background').classList.add('flow-state-active');
+            flowStateActive = true;
+          }
+          typingStartTime = 0;
+        }, 500); // Check after 500ms of inactivity
+      });
+    }
+    
+    // Adaptive Nudge Tracking
+    const nudgeEngagement = {
+      structure: { ignored: 0, engaged: 0 },
+      elaboration: { ignored: 0, engaged: 0 },
+      criticalThinking: { ignored: 0, engaged: 0 }
+    };
+    
+    function trackNudgeEngagement(type, engaged) {
+      if (nudgeEngagement[type]) {
+        if (engaged) {
+          nudgeEngagement[type].engaged++;
+        } else {
+          nudgeEngagement[type].ignored++;
+        }
+      }
+    }
+    
+    // Initialize new features
+    document.addEventListener('DOMContentLoaded', () => {
+      // Existing initialization code
+      
+      // Initialize new features
+      startFlowDetection();
+      
+      // Add ghost text after 5 seconds of inactivity in a new paragraph
+      editor.addEventListener('input', () => {
+        clearTimeout(ghostTextTimeout);
+        ghostTextTimeout = setTimeout(() => {
+          const prompts = [
+            "What evidence supports this?",
+            "Can you elaborate on this point?",
+            "How does this connect to your main argument?",
+            "What's the significance of this?",
+            "Have you considered alternative perspectives?"
+          ];
+          
+          const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+          insertGhostText(randomPrompt);
+        }, 5000); // 5 seconds
+      });
+      
+      // Micro-animations for toolbar
+      document.querySelectorAll('.toolbar-button').forEach(button => {
+        button.classList.add('transition', 'duration-200', 'ease-in-out');
+      });
+    });
+    
+    // Modify getLisaPrompt to include adaptive logic
+    async function getLisaPrompt(userText, assignmentTitle, rubric, inactivityFired, paragraphFinished, sentenceFinished, previousUserText, recentSentenceCompleted, assignmentComplete = false) {
+      // Existing implementation
+      
+      // ADDED: Adaptive nudge logic
+      const nudgeTypes = ['structure', 'elaboration', 'criticalThinking'];
+      let preferredNudgeType = 'criticalThinking';
+      
+      // Determine most engaged-with nudge type
+      let highestEngagement = -1;
+      for (const type of nudgeTypes) {
+        const engagementScore = nudgeEngagement[type].engaged - nudgeEngagement[type].ignored;
+        if (engagementScore > highestEngagement) {
+          highestEngagement = engagementScore;
+          preferredNudgeType = type;
+        }
+      }
+      
+      // ADDED: Trigger insight highlight
+      if (Math.random() > 0.7) { // 30% chance
+        setTimeout(() => {
+          highlightInsight("This is a well-reasoned argument");
+        }, 500);
+      }
+      
+      return data.suggested_next_step;
+    }
+  </script>
+</body>
+</html>
