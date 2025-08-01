@@ -199,6 +199,64 @@ export const sendLisaFeedback = async (feedbackData) => {
   }
 };
 
+// Send LISA's exact words to teacher
+export const sendLisaExactWordsToTeacher = async (lisaData) => {
+  try {
+    const token = localStorage.getItem('student_token');
+    const response = await fetch(`${SERVICES.API_GATEWAY}/api/grading/lisa-feedback-to-teacher`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        teacherId: lisaData.teacherId,
+        classId: lisaData.classId,
+        assignmentId: lisaData.assignmentId,
+        studentId: lisaData.studentId,
+        lisaExactWords: lisaData.lisaExactWords,        // Exact words LISA said
+        studentContext: lisaData.studentContext,         // What student was writing
+        feedbackType: lisaData.feedbackType,            // Type of feedback
+        confidence: lisaData.confidence,                // AI confidence
+        timestamp: new Date().toISOString()
+      })
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('Error sending LISA exact words to teacher:', error);
+    throw error;
+  }
+};
+
+// Send student's response to LISA back to teacher
+export const sendStudentResponseToLisa = async (responseData) => {
+  try {
+    const token = localStorage.getItem('student_token');
+    const response = await fetch(`${SERVICES.API_GATEWAY}/api/grading/student-response-to-lisa`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        teacherId: responseData.teacherId,
+        classId: responseData.classId,
+        assignmentId: responseData.assignmentId,
+        studentId: responseData.studentId,
+        lisaFeedbackId: responseData.lisaFeedbackId,
+        studentResponse: responseData.studentResponse,    // Student's exact words back
+        studentAction: responseData.studentAction,        // What they did
+        updatedText: responseData.updatedText,           // Revised text
+        timestamp: new Date().toISOString()
+      })
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('Error sending student response to teacher:', error);
+    throw error;
+  }
+};
+
 // =============================================================================
 // REAL-TIME COMMUNICATION
 // =============================================================================

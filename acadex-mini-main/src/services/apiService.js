@@ -187,6 +187,26 @@ export const generateLisaPrompt = async (context) => {
   }
 };
 
+// Get LISA feedback details for teacher dashboard
+export const getLisaFeedbackDetails = async (classId, assignmentId) => {
+  try {
+    const response = await gradingApi.get(`/api/grading/lisa-feedback/${classId}/${assignmentId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+};
+
+// Get student responses to LISA feedback
+export const getStudentResponsesToLisa = async (classId, assignmentId) => {
+  try {
+    const response = await gradingApi.get(`/api/grading/student-responses/${classId}/${assignmentId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+};
+
 export const preAnalysis = async (fileId, analysisData) => {
   try {
     const response = await gradingApi.post('/api/grading/pre-analysis', { fileId, ...analysisData });

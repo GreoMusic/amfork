@@ -305,9 +305,19 @@ app.post('/api/assignments/:assignmentId/notify-students', authenticateToken, re
 // LISA AI feedback -> send to teacher
 app.post('/api/grading/lisa-feedback-to-teacher', authenticateToken, requireRole(['STUDENT']), async (req, res) => {
   try {
-    const { teacherId, classId, assignmentId, feedback, studentId } = req.body;
+    const { 
+      teacherId, 
+      classId, 
+      assignmentId, 
+      studentId,
+      lisaExactWords,        // The exact words LISA said to student
+      studentContext,         // What student was writing when LISA responded
+      feedbackType,          // Type of feedback (grammar, style, content, etc.)
+      confidence,            // LISA's confidence in the feedback
+      timestamp 
+    } = req.body;
 
-    // Send feedback to teacher's notification
+    // Send detailed feedback to teacher's notification
     await fetch(`${SERVICES.NOTIFICATION}/api/notifications/send`, {
       method: 'POST',
       headers: {
@@ -317,22 +327,82 @@ app.post('/api/grading/lisa-feedback-to-teacher', authenticateToken, requireRole
       body: JSON.stringify({
         userId: teacherId,
         type: 'LISA_FEEDBACK',
-        title: 'LISA AI Feedback',
-        message: `LISA AI provided feedback to a student in your class.`,
+        title: 'LISA AI Feedback to Student',
+        message: `LISA provided feedback to ${studentId} in your class.`,
         data: { 
           classId, 
           assignmentId, 
-          studentId, 
-          feedback,
-          timestamp: new Date().toISOString()
+          studentId,
+          lisaExactWords,        // Exact words LISA said
+          studentContext,         // Student's writing context
+          feedbackType,          // Type of feedback
+          confidence,            // AI confidence level
+          timestamp: timestamp || new Date().toISOString(),
+          metadata: {
+            feedbackLength: lisaExactWords?.length || 0,
+            hasStudentResponse: false,  // Will be updated if student responds
+            studentResponse: null       // Student's reaction to LISA
+          }
         }
       })
     });
 
-    res.json({ message: 'Feedback sent to teacher' });
+    res.json({ message: 'Detailed LISA feedback sent to teacher' });
   } catch (error) {
     logger.error('Error sending LISA feedback to teacher:', error);
     res.status(500).json({ error: 'Failed to send feedback to teacher' });
+  }
+});
+
+// Student response to LISA feedback -> send to teacher
+app.post('/api/grading/student-response-to-lisa', authenticateToken, requireRole(['STUDENT']), async (req, res) => {
+  try {
+    const { 
+      teacherId, 
+      classId, 
+      assignmentId, 
+      studentId,
+      lisaFeedbackId,        // Reference to original LISA feedback
+      studentResponse,        // How student reacted to LISA
+      studentAction,          // What student did (accepted, ignored, asked for more)
+      updatedText,           // Student's revised text (if any)
+      timestamp 
+    } = req.body;
+
+    // Send student's response to teacher
+    await fetch(`${SERVICES.NOTIFICATION}/api/notifications/send`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': req.headers.authorization
+      },
+      body: JSON.stringify({
+        userId: teacherId,
+        type: 'STUDENT_RESPONSE_TO_LISA',
+        title: 'Student Response to LISA',
+        message: `${studentId} responded to LISA's feedback.`,
+        data: { 
+          classId, 
+          assignmentId, 
+          studentId,
+          lisaFeedbackId,
+          studentResponse,        // Student's exact words back to LISA
+          studentAction,          // What they did with the feedback
+          updatedText,           // Their revised writing
+          timestamp: timestamp || new Date().toISOString(),
+          metadata: {
+            responseTime: 'immediate', // or 'delayed'
+            feedbackAccepted: studentAction === 'accepted',
+            textChanged: !!updatedText
+          }
+        }
+      })
+    });
+
+    res.json({ message: 'Student response sent to teacher' });
+  } catch (error) {
+    logger.error('Error sending student response to teacher:', error);
+    res.status(500).json({ error: 'Failed to send student response to teacher' });
   }
 });
 
