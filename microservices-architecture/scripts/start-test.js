@@ -1,4 +1,8 @@
 const { spawn } = require('child_process');
+const fs = require('fs');
+function fsExists(p) {
+  try { return fs.existsSync(p); } catch (_) { return false; }
+}
 const http = require('http');
 const os = require('os');
 const path = require('path');
@@ -54,7 +58,9 @@ function startProcess(tag, cmd, args, options = {}) {
     const pyPath = isWin
       ? path.join(lisaDir, 'venv', 'Scripts', 'python.exe')
       : path.join(lisaDir, 'venv', 'bin', 'python');
-    startProcess('lisa', pyPath, ['LISA2.py'], { cwd: lisaDir, env: { ...process.env, PYTHONUNBUFFERED: '1' } });
+    // Prefer LISA3 if present
+    const entry = fsExists(path.join(lisaDir, 'LISA3.py')) ? 'LISA3.py' : 'LISA2.py';
+    startProcess('lisa', pyPath, [entry], { cwd: lisaDir, env: { ...process.env, PYTHONUNBUFFERED: '1' } });
   }
 
   // 3) Start Student Test Server (3010)
