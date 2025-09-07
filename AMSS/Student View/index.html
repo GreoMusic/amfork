@@ -803,7 +803,8 @@
 
 <script>
   // Constants for Backend Communication and AI Logic
-  const LISA_API_ENDPOINT = 'http://192.168.2.70:5000/lisa_prompt';
+  // Use student server proxy (same-origin) to avoid CORS and environment differences
+  const LISA_API_ENDPOINT = '/api/lisa_prompt';
   
   // Class data structure with assignments and rubrics
   const classesData = [
