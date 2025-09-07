@@ -5,12 +5,18 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3010;
+const PORT = process.env.PORT || 3011;
 const LISA_URL = process.env.LISA_URL || 'http://localhost:5001';
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+
+// Serve AMSS Student UI at root by default
+const studentUiDir = path.resolve(__dirname, '../../AMSS/Student View');
+app.use(express.static(studentUiDir));
+
+// Keep minimal test page under /test
+app.use('/test', express.static(path.join(__dirname, 'public')));
 
 // Proxy to LISA for testing student editor
 app.post('/api/lisa_prompt', async (req, res) => {
@@ -34,6 +40,8 @@ app.get('/health', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Student Dashboard Test Server running on http://localhost:${PORT}`);
   console.log(`Health check: http://localhost:${PORT}/health`);
+  console.log(`Student UI (default): http://localhost:${PORT}/index.html`);
+  console.log(`Test page: http://localhost:${PORT}/test/`);
 });
 
 

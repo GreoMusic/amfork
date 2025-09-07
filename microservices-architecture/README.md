@@ -483,6 +483,8 @@ cd microservices-architecture/test-student-dashboard
 npm ci
 LISA_URL=http://localhost:5001 npm run start
 # http://localhost:3010/health
+# Root serves full AMSS Student UI (Student View): http://localhost:3010/
+# Minimal LISA test page: http://localhost:3010/test/
 ```
 
 To run both with Docker Compose (plus API Gateway):
@@ -492,6 +494,14 @@ docker compose up -d --build api-gateway test-teacher-dashboard test-student-das
 ```
 
 Ensure LISA is running locally at `http://localhost:5001` (see AMSS/LISA/LISA2.py) before testing the student server.
+
+### Start LISA (local)
+```bash
+cd AMSS/LISA
+# Prefer the bundled venv to ensure torch and deps are available
+./venv/bin/python LISA2.py
+# Now available at: http://localhost:5001/lisa_prompt
+```
 
 ---
 
@@ -522,10 +532,20 @@ docker run -d --name student -p 3010:3010 \
   yourrepo/test-student-dashboard:latest
 ```
 
+3) LISA in production
+- Option A (simple): Run LISA on a dedicated VM with the provided venv
+  ```bash
+  cd AMSS/LISA && ./venv/bin/python LISA2.py
+  # reverse proxy via Nginx: lisa.yourdomain -> 5001
+  ```
+- Option B (container): Build a Docker image with Python 3.10+, torch, sentence-transformers, Flask
+  and expose `5001`, then run behind an HTTPS reverse proxy.
+
 3) Put Nginx in front (optional, recommended):
 - api.yourdomain → api-gateway:3000
 - teacher.yourdomain → teacher:3009
 - student.yourdomain → student:3010
+ - lisa.yourdomain → LISA:5001
 
 4) Environment and secrets:
 - Set `JWT_SECRET`, service URLs, and CORS `FRONTEND_URL` appropriately.
@@ -533,6 +553,7 @@ docker run -d --name student -p 3010:3010 \
 
 5) Health checks:
 - `GET /health` on each service.
+- `POST /lisa_prompt` for LISA (expects JSON payload as in local testing).
 
 This approach avoids complex orchestration and is the fastest route to production. Scale out later with ECS/Kubernetes if needed.
 
