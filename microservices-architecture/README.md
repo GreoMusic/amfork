@@ -503,6 +503,17 @@ cd AMSS/LISA
 # Now available at: http://localhost:5001/lisa_prompt
 ```
 
+### One command: start teacher, student, and LISA (Windows/macOS)
+```bash
+cd microservices-architecture
+npm run start:test
+```
+Outputs:
+- Teacher: http://localhost:3009/health
+- Student (AMSS Student View): http://localhost:3010/
+- Student test page: http://localhost:3010/test/
+- LISA: http://localhost:5001/lisa_prompt
+
 ---
 
 ## 🧩 Simplest Production Deployment (One-command per service)

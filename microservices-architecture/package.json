@@ -83,7 +83,8 @@
     "logs:subscription": "cd services/subscription-service && tail -f logs/combined.log",
     "logs:notification": "cd services/notification-service && tail -f logs/combined.log",
     "logs:analytics": "cd services/analytics-service && tail -f logs/combined.log",
-    "logs:gateway": "cd services/api-gateway && tail -f logs/combined.log"
+    "logs:gateway": "cd services/api-gateway && tail -f logs/combined.log",
+    "start:test": "node scripts/start-test.js"
   },
   "keywords": [
     "microservices",
