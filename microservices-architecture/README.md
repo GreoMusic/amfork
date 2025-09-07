@@ -467,6 +467,76 @@ npm run deploy:all
 
 ---
 
+## 🧪 Quick Local Testing (Teacher & Student)
+
+### Teacher Test Server
+```bash
+cd microservices-architecture/test-teacher-dashboard
+npm ci
+npm run start
+# http://localhost:3009/health
+```
+
+### Student Test Server (with LISA proxy)
+```bash
+cd microservices-architecture/test-student-dashboard
+npm ci
+LISA_URL=http://localhost:5001 npm run start
+# http://localhost:3010/health
+```
+
+To run both with Docker Compose (plus API Gateway):
+```bash
+cd microservices-architecture
+docker compose up -d --build api-gateway test-teacher-dashboard test-student-dashboard
+```
+
+Ensure LISA is running locally at `http://localhost:5001` (see AMSS/LISA/LISA2.py) before testing the student server.
+
+---
+
+## 🧩 Simplest Production Deployment (One-command per service)
+
+The easiest, low-ops path is Docker on a single VM (e.g., AWS Lightsail or DigitalOcean).
+
+1) Build images locally or on VM:
+```bash
+cd microservices-architecture
+docker compose build api-gateway
+docker compose build test-teacher-dashboard
+docker compose build test-student-dashboard
+```
+
+2) Run containers with environment variables:
+```bash
+docker run -d --name api-gateway -p 3000:3000 \
+  -e JWT_SECRET=change-me \
+  -e AUTH_SERVICE_URL=http://auth:3001 \
+  -e FRONTEND_URL=https://your-frontend.example \
+  yourrepo/api-gateway:latest
+
+docker run -d --name teacher -p 3009:3009 yourrepo/test-teacher-dashboard:latest
+
+docker run -d --name student -p 3010:3010 \
+  -e LISA_URL=https://your-lisa-host:5001 \
+  yourrepo/test-student-dashboard:latest
+```
+
+3) Put Nginx in front (optional, recommended):
+- api.yourdomain → api-gateway:3000
+- teacher.yourdomain → teacher:3009
+- student.yourdomain → student:3010
+
+4) Environment and secrets:
+- Set `JWT_SECRET`, service URLs, and CORS `FRONTEND_URL` appropriately.
+- For HTTPS, use a managed certificate (e.g., Cloudflare, AWS ALB, Caddy/Nginx with Let's Encrypt).
+
+5) Health checks:
+- `GET /health` on each service.
+
+This approach avoids complex orchestration and is the fastest route to production. Scale out later with ECS/Kubernetes if needed.
+
+
 ## 📞 **Support & Documentation**
 
 - **API Documentation**: Swagger UI at `/docs` for each service

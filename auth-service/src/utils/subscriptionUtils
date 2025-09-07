@@ -1,0 +1,13 @@
+export function isSubscriptionActive(subscription) {
+  if (!subscription) return false;
+  const now = new Date();
+  const expiry = new Date(subscription.expiryDate || subscription.expiresAt);
+  return expiry > now && subscription.status === 'active';
+}
+
+export function daysUntilExpiry(subscription) {
+  if (!subscription) return 0;
+  const now = new Date();
+  const expiry = new Date(subscription.expiryDate || subscription.expiresAt);
+  return Math.max(0, Math.ceil((expiry - now) / (1000 * 60 * 60 * 24)));
+}
