@@ -481,9 +481,33 @@ app.get('/api/analytics/class/:classId', (req, res) => {
   });
 });
 
-// Serve the main dashboard
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// Serve the new teacher dashboard UI for all main teacher routes
+const teacherRoutes = [
+  '/',
+  '/dashboard',
+  '/onboarding',
+  '/onboarding/*',
+  '/classes',
+  '/classes/*',
+  '/assignments',
+  '/assignments/*',
+  '/students',
+  '/profile',
+  '/login',
+  '/logout',
+  '/plan',
+  '/plan-upsell',
+  '/onboarding/welcome',
+  '/onboarding/create-class',
+  '/onboarding/create-assignment',
+  '/onboarding/plan-upsell',
+  '/onboarding/student-creation',
+];
+
+teacherRoutes.forEach(route => {
+  app.get(route, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'teacher-app.html'));
+  });
 });
 
 // Health check endpoint
@@ -521,4 +545,4 @@ app.listen(PORT, () => {
   console.log(`  GET  /api/analytics/overview`);
   console.log(`  GET  /api/subscription/:plan`);
   console.log(`  GET  /api/access/student-side/:plan`);
-}); 
+});

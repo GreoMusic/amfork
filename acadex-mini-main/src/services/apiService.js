@@ -40,6 +40,7 @@ const fileApi = axios.create({ baseURL: SERVICES.FILE_SERVICE });
 const subscriptionApi = axios.create({ baseURL: SERVICES.SUBSCRIPTION_SERVICE });
 const notificationApi = axios.create({ baseURL: SERVICES.NOTIFICATION_SERVICE });
 const analyticsApi = axios.create({ baseURL: SERVICES.ANALYTICS_SERVICE });
+const openaiApi = axios.create({ baseURL: SERVICES.API_GATEWAY });
 
 // Add request interceptor to include JWT token
 const addAuthHeader = (config) => {
@@ -50,7 +51,7 @@ const addAuthHeader = (config) => {
   return config;
 };
 
-[authApi, classApi, assignmentApi, gradingApi, fileApi, subscriptionApi, notificationApi, analyticsApi].forEach(api => {
+[authApi, classApi, assignmentApi, gradingApi, fileApi, subscriptionApi, notificationApi, analyticsApi, openaiApi].forEach(api => {
   api.interceptors.request.use(addAuthHeader);
 });
 
@@ -394,4 +395,17 @@ export const getReuest = async (url_segment, token) => {
 // Legacy packages function
 export const packages = async () => {
   return getPackages();
+};
+
+// =============================================================================
+// OPENAI CHAT API
+// =============================================================================
+
+export const openaiChat = async (content) => {
+  try {
+    const response = await openaiApi.post('/api/openai/chat', { content });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
 };

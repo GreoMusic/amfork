@@ -26,6 +26,8 @@ import Dashboard2 from "../pages/Dashboard";
 const DefaultLayout = lazy(() => import('../layout/DefaultLayout'));
 import { createHashRouter } from "react-router-dom";
 import LandingV3 from '../pages/v3/landing';
+import Students from "../pages/Students";
+import OnboardingWizard from "../pages/OnboardingWizard";
 
 console.log = () => { }
 
@@ -114,6 +116,14 @@ const Routes = () => {
         {
           path: "/checkout/:package_name",
           element: <CheckoutPage />,
+        },
+        {
+          path: "/students",
+          element: <ProtectedRoute element={<Students />} />,
+        },
+        {
+          path: "/onboarding",
+          element: <ProtectedRoute element={<OnboardingWizard />} />,
         },
       ],
     },

@@ -61,7 +61,8 @@ const SERVICES = {
   FILE: process.env.FILE_SERVICE_URL || 'http://localhost:3005',
   SUBSCRIPTION: process.env.SUBSCRIPTION_SERVICE_URL || 'http://localhost:3006',
   NOTIFICATION: process.env.NOTIFICATION_SERVICE_URL || 'http://localhost:3007',
-  ANALYTICS: process.env.ANALYTICS_SERVICE_URL || 'http://localhost:3008'
+  ANALYTICS: process.env.ANALYTICS_SERVICE_URL || 'http://localhost:3008',
+  OPENAI: process.env.OPENAI_SERVICE_URL || 'http://localhost:3010'
 };
 
 // =============================================================================
@@ -231,6 +232,22 @@ const analyticsProxy = createProxyMiddleware({
   }
 });
 
+// OpenAI Service Proxy
+const openaiProxy = createProxyMiddleware({
+  target: SERVICES.OPENAI,
+  changeOrigin: true,
+  pathRewrite: {
+    '^/api/openai': '/api/openai'
+  },
+  onProxyReq: (proxyReq, req, res) => {
+    logger.info(`OpenAI Service: ${req.method} ${req.path}`);
+  },
+  onError: (err, req, res) => {
+    logger.error('OpenAI Service Error:', err);
+    res.status(500).json({ error: 'OpenAI service unavailable' });
+  }
+});
+
 // =============================================================================
 // ROUTE DEFINITIONS
 // =============================================================================
@@ -256,6 +273,7 @@ app.use('/api/files', authenticateToken, fileProxy);
 app.use('/api/subscriptions', authenticateToken, subscriptionProxy);
 app.use('/api/notifications', authenticateToken, notificationProxy);
 app.use('/api/analytics', authenticateToken, analyticsProxy);
+app.use('/api/openai', authenticateToken, openaiProxy);
 
 // User profile routes
 app.use('/api/users', authenticateToken, authProxy);
@@ -429,4 +447,4 @@ app.listen(PORT, () => {
   logger.info('Available services:', Object.keys(SERVICES));
 });
 
-module.exports = app; 
+module.exports = app;

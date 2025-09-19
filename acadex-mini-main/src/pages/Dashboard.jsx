@@ -21,6 +21,7 @@ import { EvaluationModal } from './components/new/EvaluationModal';
 import { UploadModal } from './components/new/UploadModal';
 import PaperInstructionModal from './components/new/PaperInstructionModal';
 import DownloadAllFeedback from './components/DownloadAllFeedback';
+import ClassDetail from './ClassDetail';
 
 const MemoizedSubmissionSection = React.memo(SubmissionSection);
 const allGrades = ['A', 'B', 'C', 'D', 'F'];
@@ -31,6 +32,11 @@ const siteUrl =
         ? import.meta.env.VITE_API_URL
         : import.meta.env.VITE_API_URL_PROD;
 const apiUrl = siteUrl + '/api';
+
+const initialClasses = [
+  { id: 1, name: 'Biology 101', yearStart: 2025, yearEnd: 2026, totalStudents: 20, totalAssignments: 2, averageGrade: 'B+' },
+  { id: 2, name: 'History 201', yearStart: 2025, yearEnd: 2026, totalStudents: 18, totalAssignments: 1, averageGrade: 'A' },
+];
 
 const Dashboard = () => {
     // State management
@@ -69,6 +75,8 @@ const Dashboard = () => {
     const [uploadFiles, setUploadFiles] = useState([]);
     const [msg, setMsg] = useState('');
     const [evaluationWorker, setEvaluationWorker] = useState(null);
+    const [classes, setClasses] = useState(initialClasses);
+    const [selectedClass, setSelectedClass] = useState(null);
 
 
     // Memoize filtered files
@@ -505,6 +513,37 @@ const Dashboard = () => {
                     isDemoTrialEnded={isDemoTrialEnded}
                     mySubscription={mySubscription}
                 />
+                <div>
+                  <div data-testid="topbar">Acadex <span style={{ float: 'right' }}>Profile</span></div>
+                  <div data-testid="sidebar">
+                    <button data-testid="home-link" onClick={() => setSelectedClass(null)}>Home</button>
+                    <button data-testid="students-link">Students</button>
+                    <button data-testid="profile-link">Profile</button>
+                  </div>
+                  <div>
+                    {!selectedClass ? (
+                      <div>
+                        <h2>Class Overview <button data-testid="add-class">+</button></h2>
+                        <div style={{ display: 'flex', gap: 16 }}>
+                          {classes.length === 0 ? (
+                            <div>Create your first class</div>
+                          ) : (
+                            classes.map(c => (
+                              <div key={c.id} data-testid="class-card" onClick={() => setSelectedClass(c)}>
+                                <div data-testid="class-card-title">{c.name}</div>
+                                <div data-testid="class-card-students-count">{c.totalStudents}</div>
+                                <div data-testid="class-card-assignments-count">{c.totalAssignments}</div>
+                                <div data-testid="class-card-avg-grade">{c.averageGrade}</div>
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <ClassDetail classObj={selectedClass} />
+                    )}
+                  </div>
+                </div>
             </div>
         </MainLayout>
     );

@@ -1,0 +1,443 @@
+Acadex Teacher Flow — Liquid Glass Spec v1.0
+
+Purpose: Finalize a deterministic, agent-executable UI flow for Teacher-side (including first-time onboarding) that adheres to the Liquid Glass aesthetic. This spec provides routes, component contracts, data-testid hooks, states, and acceptance criteria so another agentic system can implement the UI in one try.
+
+⸻
+
+1) Design Principles (Liquid Glass System)
+	•	Aesthetic: translucent glass panels, soft depth blur, high-contrast text, subtle frosted edges, gentle motion (100–200ms), rounded (xl–2xl).
+	•	Layout: responsive 1280–1536px optimal, grid-based cards, generous whitespace, focus on scan-ability.
+	•	Tokens:
+	•	Radius: --radius: 16px
+	•	Elevation: --elev-1: 8px, --elev-2: 16px
+	•	Blur: --blur: 20px
+	•	Backdrop: --glass: rgba(255,255,255,0.12) on dark, rgba(0,0,0,0.06) on light
+	•	Divider: rgba(255,255,255,0.18)
+	•	Motion: --ease: cubic-bezier(0.2, 0.8, 0.2, 1); --dur: 160ms
+	•	Iconography: Lucide set; stroke 1.5; rounded joins.
+	•	Color/Grade mapping:
+	•	Green A+–B- (#00C853 to #7CB342 gradient permitted)
+	•	Yellow C+–D+ (#FFD600 to #FBC02D)
+	•	Red < D+ (#FF5252 to #E53935)
+	•	Use color bars/lozenges with accessible contrast (WCAG AA).
+
+⸻
+
+2) Information Architecture & Routes
+	•	GET /login → existing/new.
+	•	GET /onboarding/welcome → timed welcome (new only).
+	•	GET /onboarding/create-class → Step 1 (new only subpath 1).
+	•	GET /onboarding/create-assignment → Step 2 wizard (6 steps).
+	•	GET /onboarding/plan-upsell → plan dialog/screen.
+	•	GET /onboarding/student-creation → (Gold or School Usage, subpath 2).
+	•	GET /dashboard (Home) → class overview.
+	•	GET /classes/:classId → class detail (year range, assignments list).
+	•	GET /classes/:classId/assignments/new → 6-step wizard (same as onboarding step 2).
+	•	GET /assignments/:assignmentId → assignment detail.
+	•	GET /students → student creation/management.
+	•	GET /profile → profile/settings + plan card.
+
+Global 404/500, auth guard, and plan guard.
+
+⸻
+
+3) Global Layout Components
+	•	Top Bar (data-testid="topbar"): left app logo, right CTA (contextual), profile avatar.
+	•	Sidebar (data-testid="sidebar"): Home, Student Creation, Profile/Settings.
+	•	Items: Home (home-link), Students (students-link), Profile (profile-link).
+	•	Floating Add: Contextual + button top-right of primary content.
+	•	Toasts (success/warn/error) glass chips.
+	•	Confirm Modals (delete, downgrade, bulk actions) with glass overlay.
+
+⸻
+
+4) Plans & Capabilities Matrix
+
+Plan	Submissions/mo	Assessments/mo	Student-side	Roster mgmt	Cutting-edge AI	Notes
+Free/Demo	20	40	✗	✗	✗	Onboarding upsell shows limits
+Bronze ($10)	100	200	✗	✗	✗	
+Silver ($20)	∞	∞	✗	✗	✗	
+Gold ($40)	∞	∞	✓	✓	✓	Access toggled in Profile
+School Usage	∞	∞	✓	✓	Admin-defined	License-bound
+
+Plan Guard Behavior: When action requires unavailable feature, show Plan Gate dialog: concise explanation → Upgrade CTA or “I’m good”.
+
+⸻
+
+5) Dashboard (Home)
+
+Route: /dashboard
+
+Header: “Class Overview” + + icon (Add Class) at top-right (data-testid="add-class").
+
+Cards Grid: Each class card (data-testid="class-card") shows:
+	•	Class Name (class-card-title)
+	•	Total Students (class-card-students-count)
+	•	Total Assignments (class-card-assignments-count)
+	•	Average Grade (class-card-avg-grade + color badge)
+	•	Click → /classes/:classId
+
+Empty State: If no classes → glass card with CTA “Create your first class” (same add-class).
+
+⸻
+
+6) Add/Edit Class
+	•	Add Button (global top-right or empty state) opens Create Class Modal (create-class-modal).
+	•	Fields: class-name (required), class-description (optional), year-start, year-end.
+	•	Primary: Create (create-class-submit), Secondary: Cancel.
+	•	Edit via class context menu on Class Detail (optional MVP).
+
+⸻
+
+7) Class Detail
+
+Route: /classes/:classId
+
+Header: Class Name + Year Start–End display (class-year-range). Top-right: Create Assignment (add-assignment).
+
+Assignments List (cards or list; default cards). Each Assignment Card (assignment-card):
+	•	Title (assignment-title)
+	•	Completion Rate: students complete / not complete (assignment-completion-rate)
+	•	Grade Average (assignment-avg-grade + color)
+	•	Click → /assignments/:assignmentId
+
+Empty State: “No assignments yet. Create one.” with add-assignment CTA.
+
+⸻
+
+8) Assignment Creation Wizard (6 Steps)
+
+Route: /classes/:classId/assignments/new or /onboarding/create-assignment
+
+Progress Header: steps 1–6 with glass stepper (wizard-stepper).
+	1.	Title (step1-title) – text input; required.
+	2.	Assessment Details (step2-details) – rich text (or textarea) for instructions/outcomes.
+	3.	Rubric (step3-rubric): Upload (rubric-upload) → parsed into editable textbox (rubric-editor).
+	4.	Look Out For (step4-lookouts): 9 checkboxes (IDs fixed): big-ideas, grammar, student-thought-process, evidence-citation, structure, clarity, originality, analysis-depth, mechanics.
+	5.	Grade Level (step5-gradelevel): Buttons K-6 (single), 7, 8, 9, 10, 11, 12, College.
+	6.	Grading Style (step6-style): Radio: critical, normal, flexible with descriptions.
+
+Controls: Next (wizard-next), Back (wizard-back), Save & Exit (wizard-save-exit).
+
+Validation: block Next if required fields empty. Auto-save draft every 10s.
+
+⸻
+
+9) Assignment Detail
+
+Route: /assignments/:assignmentId
+
+Header Metrics (glass stat chips):
+	•	Average Grade (assign-avg-grade)
+	•	Total Papers Uploaded (assign-total-uploaded)
+	•	Total Papers Graded (assign-total-graded)
+
+Primary Buttons (below metrics):
+	•	Grade All (btn-grade-all) – filter dropdown: recent, year, all, past, present (grade-all-filter).
+	•	Grade Checked (btn-grade-checked).
+	•	Download Feedback (btn-download-feedback) – filter same as Grade All.
+
+Submissions View (list default; toggle to cards):
+	•	Each row/card (submission-row) shows:
+	•	Checkbox (submission-check)
+	•	Student-side logo if from student UI (submission-origin-logo) else none.
+	•	Completion status icon: thumbs-up (green) or thumbs-down (grey/red) (submission-completion)
+	•	Paper name (submission-title)
+	•	Grade (submission-grade) + color pill per mapping
+	•	3-dot menu (submission-menu):
+	•	View Submission (menu-view)
+	•	Evaluate this Paper (menu-evaluate)
+	•	Edit Title (menu-edit)
+	•	Download Paper (menu-download-paper)
+	•	Download Grade Output (menu-download-grade)
+
+Empty State: “No submissions yet.” with tips to upload or invite students (if Gold/School).
+
+⸻
+
+10) Student Creation/Management
+
+Route: /students
+
+Header: “Students” + class selector (students-class-select).
+
+Actions Bar: add-student, bulk-import, bulk-delete (guarded by confirm), Search (students-search).
+
+Roster Table (students-table): inline editable like a spreadsheet.
+	•	Columns: Checkbox (students-row-check), Name, Email, Student ID, Status, Last Active.
+	•	Row menu: Edit, Delete.
+	•	Inline save on blur; Undo toast within 5s.
+
+Alt Enroll (Gold/School): “Show QR” (students-qr) to let students self-enroll.
+
+⸻
+
+11) Profile / Settings
+
+Route: /profile
+
+Sections:
+	•	Profile Card: avatar (profile-avatar-upload), name, email.
+	•	Plan Card (plan-card):
+	•	Shows Gold Tier or School Usage status.
+	•	If Free/Bronze/Silver → Upgrade CTA (plan-upgrade).
+	•	Toggle to enable Cutting-edge AI models if Gold (toggle-cutting-edge-ai).
+	•	Display plan limits (live counters: submissions-used, assessments-used).
+
+Notes: Free/Bronze/Silver lack student-side & roster management; only class and assignment creation/grading enabled.
+
+⸻
+
+12) Onboarding Flows
+
+Main Path 1 – New Login
+	•	Subpath 1 (No Payment):
+	1.	/onboarding/welcome – timed 2.5s warm welcome. continue auto-advance or skip.
+	2.	/onboarding/create-class – required: Class Name, optional Description.
+	3.	/onboarding/create-assignment – 6-step wizard (see §8).
+	4.	/onboarding/plan-upsell – Dialog shows plan matrix and limits with CTA Bronze $10, Silver $20, Gold $40; or I’m good (plan-good). Selecting a plan → /payment (external or embedded). After payment:
+	•	If Gold → Subpath 2.
+	•	Else → /dashboard.
+	•	Subpath 2 (Gold chosen) → /onboarding/student-creation:
+	•	Step: Select Class (onb-students-class-select).
+	•	Choice: Enroll Manually (onb-students-manual) or QR Enroll (onb-students-qr).
+	•	After roster setup → /dashboard with first-time guided tour.
+
+First-time Guided Tour: floating arrows + hotspots (max 6): Home, Add Class, Add Assignment, Students, Assignment Detail actions, Profile. Persist tourCompleted=true then route to Main Path 2.
+
+Main Path 2 – Existing Users
+	•	Direct to /dashboard. All behaviors per plan guards.
+
+⸻
+
+13) Permissions & Guards
+	•	Student-side features visible only for Gold/School.
+	•	If non-eligible plans try to access /students or student-origin submissions, show Plan Gate.
+	•	Quota guards show remaining counts and block on exceed.
+
+⸻
+
+14) States & UX Details
+	•	Loading: skeleton glass shimmer on cards and tables.
+	•	Empty: friendly glass panels with CTA.
+	•	Error: inline messages with Retry.
+	•	Confirmations: destructive actions require confirm; bulk actions show counts.
+	•	Accessibility: All actionable controls have aria-labels that mirror data-testid.
+
+⸻
+
+15) Deterministic data-testid Map (extract)
+	•	Top level: topbar, sidebar, add-class, home-link, students-link, profile-link.
+	•	Dashboard cards: class-card, class-card-title, class-card-students-count, class-card-assignments-count, class-card-avg-grade.
+	•	Class detail: class-year-range, add-assignment, assignment-card, assignment-title, assignment-completion-rate, assignment-avg-grade.
+	•	Assignment detail header: assign-avg-grade, assign-total-uploaded, assign-total-graded.
+	•	Primary actions: btn-grade-all, grade-all-filter, btn-grade-checked, btn-download-feedback.
+	•	Submissions: submission-row, submission-check, submission-origin-logo, submission-completion, submission-title, submission-grade, submission-menu, menu-view, menu-evaluate, menu-edit, menu-download-paper, menu-download-grade.
+	•	Students: students-class-select, add-student, bulk-import, bulk-delete, students-search, students-table, students-row-check, students-qr.
+	•	Profile: profile-avatar-upload, plan-card, plan-upgrade, toggle-cutting-edge-ai, submissions-used, assessments-used.
+	•	Wizard: wizard-stepper, wizard-next, wizard-back, wizard-save-exit, step1-title, step2-details, rubric-upload, rubric-editor, step4-lookouts (and each checkbox id), step5-gradelevel, step6-style.
+	•	Onboarding: plan-good, onb-students-class-select, onb-students-manual, onb-students-qr.
+
+⸻
+
+16) Data Models (client-side shape)
+
+// Class
+Class {
+  id: string;
+  name: string;
+  description?: string;
+  yearStart?: number; // e.g., 2025
+  yearEnd?: number;   // e.g., 2026
+  totalStudents: number;
+  totalAssignments: number;
+  averageGrade?: string; // e.g., "B+"
+}
+
+// Assignment
+Assignment {
+  id: string;
+  classId: string;
+  title: string;
+  details?: string;
+  rubric?: string; // serialized text
+  lookouts: string[]; // fixed ids from step4
+  gradeLevel: 'K-6'|'7'|'8'|'9'|'10'|'11'|'12'|'College';
+  style: 'critical'|'normal'|'flexible';
+  completion: { completed: number; total: number; };
+  averageGrade?: string;
+}
+
+// Submission
+Submission {
+  id: string;
+  assignmentId: string;
+  title: string;
+  origin: 'student'|'teacher';
+  completed: boolean;
+  grade?: string; // A+..F
+  files: { paperUrl: string; gradeOutputUrl?: string };
+  createdAt: string;
+  gradedAt?: string;
+}
+
+// Student
+Student {
+  id: string;
+  classId: string;
+  name: string;
+  email?: string;
+  studentId?: string;
+  status: 'active'|'inactive';
+  lastActive?: string;
+}
+
+// User/Plan
+User {
+  id: string; name: string; email: string; avatarUrl?: string;
+  plan: 'free'|'bronze'|'silver'|'gold'|'school';
+  usage: { submissions: number; assessments: number };
+  features: { studentSide: boolean; roster: boolean; cuttingEdgeAI: boolean };
+}
+
+
+⸻
+
+17) Key API Contracts (pseudo)
+	•	GET /api/classes → Class[]
+	•	POST /api/classes → Class
+	•	GET /api/classes/:id → Class
+	•	GET /api/classes/:id/assignments → Assignment[]
+	•	POST /api/classes/:id/assignments → Assignment
+	•	GET /api/assignments/:id → Assignment
+	•	GET /api/assignments/:id/submissions → Submission[]
+	•	POST /api/assignments/:id/grade-all?scope=recent|year|all|past|present
+	•	POST /api/submissions/:id/grade
+	•	GET /api/submissions/:id/download (paper)
+	•	GET /api/submissions/:id/grade-output (feedback)
+	•	GET /api/students?classId=... → Student[]
+	•	POST /api/students | PATCH /api/students/:id | DELETE /api/students/:id
+	•	GET /api/me → User
+	•	PATCH /api/me (toggle cuttingEdgeAI)
+
+Plan Guard Header: backend returns X-Feature-Allowed: true|false and remaining quota; front-end renders Gate if false.
+
+⸻
+
+18) Grade → Color Logic
+
+A+, A, A-, B+, B, B-  → green
+C+, C, C-, D+         → yellow
+Below D+              → red
+
+Implement as pure function gradeToColor(grade: string): 'green'|'yellow'|'red'.
+
+⸻
+
+19) Analytics Events (namespaced acadex.*)
+	•	acadex.login.success
+	•	acadex.onboarding.welcome.view
+	•	acadex.onboarding.class.created
+	•	acadex.onboarding.assignment.completed
+	•	acadex.plan.view
+	•	acadex.plan.select {plan}
+	•	acadex.students.enroll.method {method: ‘manual’|‘qr’}
+	•	acadex.dashboard.view
+	•	acadex.class.view {classId}
+	•	acadex.assignment.view {assignmentId}
+	•	acadex.assignment.gradeAll {scope}
+	•	acadex.submission.evaluate
+	•	acadex.submission.download.paper
+	•	acadex.submission.download.grade
+
+⸻
+
+20) Accessibility & Performance
+	•	All buttons have aria-label mirroring data-testid.
+	•	Focus ring: high-contrast outline.
+	•	Keyboard: full navigation; wizard supports Enter/Space; menus Esc-close.
+	•	Lazy-load long lists; virtualize submissions > 200 rows.
+
+⸻
+
+21) Guided Tour Steps (first-time only)
+	1.	add-class – “Add a class.”
+	2.	add-assignment – “Create assignments.”
+	3.	assignment-card – “Track completion & average.”
+	4.	students-link – “Manage roster (Gold/School).”
+	5.	btn-grade-all – “Bulk-grade submissions.”
+	6.	plan-card – “Manage plan & models.”
+Persist localStorage.tourCompleted = true.
+
+⸻
+
+22) Edge Cases
+	•	Year spans: If yearStart missing, show “Year not set” link to edit.
+	•	Rubric parse fail: fall back to raw text in rubric-editor + toast.
+	•	Quota exceeded: Disable action, show Gate with counters.
+	•	Downgrade from Gold: Hide student-side; retain data but mark read-only until re-upgrade.
+
+⸻
+
+23) Agent-Executable Test Plan (Gherkin)
+
+Feature: Existing teacher goes to dashboard
+  Scenario: Main Path 2 navigation
+    Given I am an authenticated user on plan "silver"
+    When I visit "/dashboard"
+    Then I should see an element with testid "add-class"
+    And I should see at least 1 element with testid "class-card"
+
+Feature: Create assignment from class detail
+  Scenario: Wizard completion
+    Given I click testid "add-assignment"
+    When I fill "step1-title" with "Essay 1"
+    And I fill "step2-details" with "Write about ecosystems"
+    And I upload to "rubric-upload" a file "rubric.pdf"
+    And I check "big-ideas" and "grammar" and "analysis-depth"
+    And I click grade level "10"
+    And I select grading style "normal"
+    And I click "wizard-next" until finish
+    Then I should land on the class detail with a card titled "Essay 1"
+
+Feature: Assignment actions
+  Scenario: Grade all recent
+    Given I am on "/assignments/123"
+    When I click "btn-grade-all"
+    And I set "grade-all-filter" to "recent"
+    Then a grading job should start and a toast appears
+
+Feature: Plan guard
+  Scenario: Free plan tries students page
+    Given my plan is "free"
+    When I navigate to "/students"
+    Then I see a Plan Gate dialog with Upgrade CTA "plan-upgrade"
+
+
+⸻
+
+24) Acceptance Checklist (Ship-Ready)
+	•	All routes load with skeleton states.
+	•	Dashboard shows correct class metrics & colorized averages.
+	•	Class detail shows year range & assignment cards.
+	•	Wizard validates required fields, auto-saves, supports rubric upload + edit.
+	•	Assignment detail displays metrics and three primary buttons with filters.
+	•	Submissions view supports checkbox selection, origin logo, completion icons, grade colors, and 3-dot menu actions.
+	•	Students page behaves like inline-edit roster; supports QR for Gold/School.
+	•	Profile shows avatar, plan status, upgrade/toggles, and counters.
+	•	Plan guard appears for restricted features and when quotas are exceeded.
+	•	Guided tour displays only once and stores completion.
+	•	data-testid attributes match this spec exactly.
+	•	All controls have aria-labels and keyboard navigation.
+
+⸻
+
+25) Visual Notes (Liquid Glass)
+	•	Panels: frosted glass containers with subtle inner highlight and soft shadow.
+	•	Hover: slight lift (translateY -2px) + blur increase.
+	•	Focus: glow ring; reduce blur for clarity.
+	•	Cards: icon + title row; metric chips right aligned; action affordances minimal until hover.
+
+⸻
+
+This spec is intentionally prescriptive so an agent can build the UI deterministically while leaving room for styling polish within the Liquid Glass system.
